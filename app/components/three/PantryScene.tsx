@@ -203,7 +203,8 @@ export default function PantryScene({ className }: { className?: string }) {
     let raf = 0;
     let visible = true;
     let elapsed = 0;
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
+    timer.connect(document);
 
     const draw = (time: number) => {
       pointer.x += (target.x - pointer.x) * 0.06;
@@ -223,7 +224,8 @@ export default function PantryScene({ className }: { className?: string }) {
 
     const tick = () => {
       raf = requestAnimationFrame(tick);
-      const delta = Math.min(clock.getDelta(), 0.05);
+      timer.update();
+      const delta = Math.min(timer.getDelta(), 0.05);
       if (!visible || document.hidden) return;
       elapsed += delta;
       draw(elapsed);
@@ -234,12 +236,6 @@ export default function PantryScene({ className }: { className?: string }) {
     } else {
       raf = requestAnimationFrame(tick);
     }
-
-    const onVisibility = () => {
-      if (!visible || reduced) return;
-      clock.getDelta();
-    };
-    document.addEventListener("visibilitychange", onVisibility);
 
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -254,7 +250,7 @@ export default function PantryScene({ className }: { className?: string }) {
       cancelAnimationFrame(raf);
       io.disconnect();
       observer.disconnect();
-      document.removeEventListener("visibilitychange", onVisibility);
+      timer.dispose();
       host.removeEventListener("pointermove", onPointerMove);
       host.removeEventListener("pointerleave", onPointerLeave);
       scene.traverse((object) => {
