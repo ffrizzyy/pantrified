@@ -25,11 +25,11 @@ await page.locator(".sample-card").first().click();
 await page.waitForTimeout(600);
 await shot("02-review");
 
-await page.getByRole("button", { name: /Lanjut atur budget/ }).click();
+await page.getByRole("button", { name: /lanjut atur budget/i }).click();
 await page.waitForTimeout(400);
 await shot("03-constraints");
 
-await page.getByRole("button", { name: /Buat 3 rencana/ }).click();
+await page.getByRole("button", { name: /buatkan 3 pilihan menu/i }).click();
 await page.waitForTimeout(800);
 await shot("04-plans");
 
@@ -41,12 +41,12 @@ await page.locator(".sticky-cta .btn").click();
 await page.waitForTimeout(700);
 await shot("06-grocery");
 
-await page.locator(".rail").getByRole("button", { name: /Buat kartu belanja/ }).click();
+await page.locator(".rail").getByRole("button", { name: /Bikin kartu belanja/ }).click();
 await page.waitForTimeout(1400);
 await shot("07-share");
 const card = await page.locator(".share-canvas").boundingBox();
 console.log("share canvas:", card ? `${Math.round(card.width)}x${Math.round(card.height)}` : "none");
-await page.getByRole("button", { name: "Gelap" }).click();
+await page.getByRole("button", { name: "Mode Gelap" }).click();
 await page.waitForTimeout(900);
 await shot("08-share-dark");
 const exported = await page.evaluate(() => document.querySelector(".share-canvas").toDataURL("image/png"));

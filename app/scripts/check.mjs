@@ -1,4 +1,4 @@
-﻿import { chromium } from "@playwright/test";
+import { chromium } from "@playwright/test";
 
 const BASE = "http://127.0.0.1:4173/";
 const browser = await chromium.launch();
@@ -14,7 +14,7 @@ page.on("console", (m) => {
 page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
 
 const check = (label, ok, extra = "") =>
-  console.log(`${ok ? "PASS" : "FAIL"}  ${label}${extra ? ` â€” ${extra}` : ""}`);
+  console.log(`${ok ? "PASS" : "FAIL"}  ${label}${extra ? ` — ${extra}` : ""}`);
 
 await page.goto(BASE, { waitUntil: "networkidle" });
 
@@ -55,7 +55,7 @@ const buffer = Buffer.from(
   "base64",
 );
 await page.reload({ waitUntil: "networkidle" });
-await page.getByRole("button", { name: /Mulai dari foto kulkas/ }).click();
+await page.getByRole("button", { name: /Mulai dari Foto Kulkas/ }).click();
 await page.locator('input[type="file"]').setInputFiles({
   name: "kulkas.png",
   mimeType: "image/png",
@@ -63,7 +63,7 @@ await page.locator('input[type="file"]').setInputFiles({
 });
 await page.waitForTimeout(500);
 const reviewTitle = await page.locator(".screen-title").textContent();
-check("upload opens review", reviewTitle === "Cek bahan", String(reviewTitle));
+check("upload opens review", reviewTitle === "Cek bahan dulu yuk", String(reviewTitle));
 const itemCount = await page.locator(".item-row").count();
 check("detector returns items", itemCount > 0, `${itemCount} items`);
 const label = await page.locator(".screen-sub strong").textContent();
@@ -82,12 +82,12 @@ const afterAdd = await page.locator(".item-row").count();
 check("add ingredient works", afterAdd === itemCount + 1, `${afterAdd} items`);
 
 // equipment sheet
-await page.getByRole("button", { name: /Lanjut atur budget/ }).click();
+await page.getByRole("button", { name: /lanjut atur budget/i }).click();
 await page.waitForTimeout(300);
 await page.getByRole("button", { name: /Alat masak/ }).click();
 await page.waitForTimeout(300);
 const sheetTitle = await page.locator(".sheet h2").textContent();
-check("equipment sheet opens", sheetTitle === "Alat masak", String(sheetTitle));
+check("equipment sheet opens", sheetTitle === "Pilih alat masak", String(sheetTitle));
 await page.locator(".chip-grid .chip", { hasText: "oven" }).click();
 await page.getByRole("button", { name: "Selesai" }).click();
 await page.waitForTimeout(300);
@@ -100,7 +100,7 @@ const budgetValue = await budget.inputValue();
 check("budget formats with dots", budgetValue === "45.000", budgetValue);
 
 // generate plans
-await page.getByRole("button", { name: /Buat 3 rencana/ }).click();
+await page.getByRole("button", { name: /buatkan 3 pilihan menu/i }).click();
 await page.waitForTimeout(500);
 const plans = await page.locator(".plan-card").count();
 check("three plans", plans === 3, `${plans} plans`);
@@ -108,7 +108,7 @@ check("three plans", plans === 3, `${plans} plans`);
 // detail + steps
 await page.locator(".plan-card").nth(1).locator(".plan-foot .btn").click();
 await page.waitForTimeout(400);
-await page.getByRole("tab", { name: "Langkah" }).click();
+await page.getByRole("tab", { name: "Cara masak" }).click();
 const steps = await page.locator(".method li").count();
 check("steps render", steps > 0, `${steps} steps`);
 const priceNote = await page.locator(".detail-body .fine").count();
@@ -117,13 +117,13 @@ check("price note hidden on steps tab", priceNote === 0, `${priceNote} notes`);
 // grocery + clipboard + csv
 await page.getByRole("button", { name: /daftar belanja/ }).click();
 await page.waitForTimeout(400);
-await page.getByRole("button", { name: /Salin untuk WhatsApp/ }).click();
+await page.getByRole("button", { name: /Salin teks untuk WhatsApp/ }).click();
 await page.waitForTimeout(500);
 const clip = await page.evaluate(() => navigator.clipboard.readText());
-check("clipboard has list", clip.includes("Daftar belanja Pantrified"), `${clip.split("\n").length} lines`);
+check("clipboard has list", clip.includes("Daftar Belanja Pantrified"), `${clip.split("\n").length} lines`);
 
 const download = page.waitForEvent("download");
-await page.getByRole("button", { name: /Unduh CSV/ }).click();
+await page.getByRole("button", { name: /Unduh format CSV/ }).click();
 const file = await download;
 const csv = await (await file.createReadStream()).toArray();
 check("csv download", file.suggestedFilename().endsWith(".csv"), file.suggestedFilename());
@@ -132,8 +132,8 @@ check("csv has header", Buffer.concat(csv).toString().startsWith('"bahan"'), "")
 // persistence
 await page.reload({ waitUntil: "networkidle" });
 await page.waitForTimeout(400);
-const resume = await page.locator(".resume").count();
-check("session resumes after reload", resume === 1, `${resume} resume card`);
+const resume = await page.locator(".hero .btn-ghost").count();
+check("session resumes after reload", resume === 1, `${resume} resume button`);
 
 // clear data
 await page.locator(".tabbar .tab", { hasText: "Akun" }).click();
@@ -162,9 +162,9 @@ check("desktop 3d scene renders", Boolean(scene && scene.width > 200 && scene.he
 
 await desk.locator(".sample-card").first().click();
 await desk.waitForTimeout(400);
-await desk.getByRole("button", { name: /Lanjut atur budget/ }).click();
+await desk.getByRole("button", { name: /lanjut atur budget/i }).click();
 await desk.waitForTimeout(300);
-await desk.getByRole("button", { name: /Buat 3 rencana/ }).click();
+await desk.getByRole("button", { name: /buatkan 3 pilihan menu/i }).click();
 await desk.waitForTimeout(600);
 check("desktop plans grid", (await desk.locator(".plan-card").count()) === 3);
 
@@ -173,7 +173,7 @@ await desk.waitForTimeout(400);
 check("desktop rail visible", await desk.locator(".rail").isVisible());
 await desk.locator(".sticky-cta .btn").click();
 await desk.waitForTimeout(400);
-await desk.locator(".rail").getByRole("button", { name: /Buat kartu belanja/ }).click();
+await desk.locator(".rail").getByRole("button", { name: /Bikin kartu belanja/ }).click();
 await desk.waitForTimeout(1400);
 
 check("desktop share dialog opens", await desk.locator(".share-dialog").isVisible());
@@ -181,7 +181,7 @@ const shareCanvas = await desk.locator(".share-canvas").evaluate((el) => ({ w: e
 check("share card is 1080x1350", shareCanvas.w === 1080 && shareCanvas.h === 1350, `${shareCanvas.w}x${shareCanvas.h}`);
 
 const pngDownload = desk.waitForEvent("download");
-await desk.getByRole("button", { name: /Unduh PNG/ }).click();
+await desk.getByRole("button", { name: /Unduh sebagai PNG/ }).click();
 const png = await pngDownload;
 check("share card downloads", png.suggestedFilename().endsWith(".png"), png.suggestedFilename());
 

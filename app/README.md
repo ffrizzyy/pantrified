@@ -56,6 +56,7 @@ app/
 - **fabric.js** draws the share card (`components/ShareCard.tsx`) on a `StaticCanvas` at 1080×1350 and exports a PNG. It is imported dynamically, so it never ships in the first load. Light and dark palettes are defined in the component.
 - **three.js** powers the desktop-only pantry still-life (`components/three/PantryScene.tsx`): plate, food meshes, lights, pointer parallax. It loads via `next/dynamic` with `ssr: false`, only mounts at ≥1024px, pauses when offscreen or hidden, and renders a single frame under `prefers-reduced-motion`.
 - **Desktop UI** starts at `min-width: 1024px`: fixed sidebar with nav, new-plan CTA, and session card; sticky topbar; wide content with two-column screen grids and summary rails. The mobile tab bar and sticky CTAs are hidden there. Both layouts share the same screens and state.
+- **Mobile UI** is designed at 390px first: 20px screen gutters, a single deep-green home hero, 3:2 sample cards, 16:9 plan art, a two-row review item with the quantity stepper under the name, and a two-column secondary action row on the grocery screen. Fraunces (`--font-serif`) is reserved for headings, the brand, and recipe titles; Plus Jakarta Sans (`--font-ui`) carries UI, body, and tabular numbers.
 - **Motion** follows short, ease-out transitions (120–260ms) on transform and opacity only, with `prefers-reduced-motion` guards. Tokens (`--ease-out`, `--ease-spring`, `--dur-fast/base/slow`) are at the top of `globals.css`.
 
 ## Checks
@@ -63,7 +64,7 @@ app/
 ```powershell
 node scripts/shot.mjs          # mobile flow, writes shots/*.png, fails on console errors
 node scripts/shot-desktop.mjs  # 1440×900 flow incl. 3D hero and share card, writes shots/desk-*.png
-node scripts/check.mjs         # 31 checks: PWA, offline, flow, clipboard, CSV, persistence,
+node scripts/check.mjs         # 30 checks: PWA, offline, flow, clipboard, CSV, persistence,
                                # desktop shell, 3D canvas, share card size + PNG download
 ```
 

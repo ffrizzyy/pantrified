@@ -85,13 +85,13 @@ export function Review({
                       {!off && <Icon name="check" size={14} />}
                     </button>
                     <div className="item-main">
-                      <span className="item-name">
-                        {ing?.name ?? item.id}
-                        {state === "check" && !off && <span className="tag tag-warn">{copy.review.checkTag}</span>}
-                      </span>
+                      <span className="item-name">{ing?.name ?? item.id}</span>
                       <span className="item-meta">
                         <span className="item-cat">{copy.categories[ing?.category ?? ""] ?? ""}</span> ·{" "}
                         {copy.review.confidence(Math.round(item.confidence * 100))}
+                        {state === "check" && !off && (
+                          <span className="tag tag-warn tag-inline">{copy.review.checkTag}</span>
+                        )}
                       </span>
                     </div>
                     <div className="stepper" aria-label={copy.a11y.qty(ing?.name ?? item.id)}>

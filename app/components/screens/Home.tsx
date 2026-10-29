@@ -33,14 +33,21 @@ export function Home({
       </header>
 
       <section className="hero">
-        <FoodArt art={0} className="hero-art mob" scale={0.58} cx={80} cy={24} label={copy.home.heroArtLabel} />
-        <div className="hero-scrim mob" aria-hidden="true" />
+        <FoodArt
+          plain
+          art={0}
+          className="hero-art mob"
+          scale={1.05}
+          cx={64}
+          cy={30}
+          label={copy.home.heroArtLabel}
+        />
 
         <div className="hero-copy">
           <span className="eyebrow">{copy.home.eyebrow}</span>
           <h1>{copy.home.heroTitle}</h1>
           <p>{copy.home.heroBody}</p>
-          <div className="hero-actions desk">
+          <div className="hero-actions">
             <button type="button" className="btn btn-primary btn-lg" onClick={onStart}>
               <Icon name="camera" size={20} />
               {copy.home.cta}
@@ -52,7 +59,7 @@ export function Home({
               </button>
             )}
           </div>
-          <p className="fine hero-fine desk">{copy.home.budgetNote(rp(budget))}</p>
+          <p className="fine hero-fine">{copy.home.budgetNote(rp(budget))}</p>
         </div>
 
         <div className="hero-visual desk" aria-hidden={!wide}>
@@ -61,26 +68,6 @@ export function Home({
           <span className="scene-hint">{copy.desktop.sceneHint}</span>
         </div>
       </section>
-
-      <div className="home-cta mob">
-        <button type="button" className="btn btn-primary btn-block btn-lg" onClick={onStart}>
-          <Icon name="camera" size={20} />
-          {copy.home.cta}
-        </button>
-      </div>
-
-      {hasSession && (
-        <button type="button" className="resume mob" onClick={onResume}>
-          <span className="resume-icon">
-            <Icon name="clock" size={18} />
-          </span>
-          <span>
-            <strong>{copy.home.resumeTitle}</strong>
-            <span className="muted">{copy.home.resumeBody}</span>
-          </span>
-          <Icon name="chevron" size={18} />
-        </button>
-      )}
 
       <section className="home-section">
         <div className="section-head">
@@ -116,7 +103,7 @@ export function Home({
             <li key={step.title}>
               <span className="step-num">{index + 1}</span>
               <span>
-                <strong>{step.title}</strong>
+                <strong>{step.title.replace(/^\d+\.\s*/, "")}</strong>
                 <span className="muted">{step.body}</span>
               </span>
             </li>
@@ -132,8 +119,6 @@ export function Home({
           </div>
         ))}
       </div>
-
-      <p className="fine mob">{copy.home.budgetNote(rp(budget))}</p>
     </div>
   );
 }

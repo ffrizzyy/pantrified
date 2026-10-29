@@ -1,4 +1,4 @@
-﻿import { chromium } from "@playwright/test";
+import { chromium } from "@playwright/test";
 import { mkdirSync } from "node:fs";
 
 mkdirSync("shots", { recursive: true });
@@ -34,11 +34,11 @@ await page.locator(".sample-card").first().click();
 await page.waitForTimeout(500);
 await shot("02-review");
 
-await page.getByRole("button", { name: /Lanjut atur budget/ }).click();
+await page.getByRole("button", { name: /lanjut atur budget/i }).click();
 await page.waitForTimeout(400);
 await shot("03-constraints");
 
-await page.getByRole("button", { name: /Buat 3 rencana/ }).click();
+await page.getByRole("button", { name: /buatkan 3 pilihan menu/i }).click();
 await page.waitForTimeout(700);
 await shot("04-plans");
 
@@ -51,7 +51,7 @@ await page.getByRole("button", { name: /daftar belanja/ }).click();
 await page.waitForTimeout(500);
 await shot("06-grocery");
 
-await page.getByRole("button", { name: /Buat kartu belanja/ }).click();
+await page.getByRole("button", { name: /Bikin kartu belanja/ }).click();
 await page.waitForTimeout(1300);
 await page.screenshot({ path: "shots/06b-share.png" });
 const shareDialog = await page.locator(".share-dialog").boundingBox();
@@ -68,11 +68,11 @@ await page.getByRole("button", { name: /Akun/ }).click();
 await page.waitForTimeout(400);
 await shot("07-settings");
 
-await page.locator(".tabbar .tab", { hasText: "Rencana" }).click();
+await page.locator(".tabbar .tab", { hasText: "Menu" }).click();
 await page.waitForTimeout(400);
 await page.locator(".plan-card").nth(1).locator(".plan-foot .btn").click();
 await page.waitForTimeout(400);
-await page.getByRole("tab", { name: "Langkah" }).click();
+await page.getByRole("tab", { name: "Cara masak" }).click();
 await page.waitForTimeout(300);
 await shot("08-detail-steps");
 
@@ -82,7 +82,7 @@ console.log("console errors:", errors.length ? errors : "none");
 // sheets
 await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
 await page.waitForTimeout(500);
-await page.getByRole("button", { name: /Mulai dari foto kulkas/ }).click();
+await page.getByRole("button", { name: /Mulai dari Foto Kulkas/ }).click();
 await page.waitForTimeout(400);
 await page.screenshot({ path: "shots/09-start-sheet.png" });
 await page.getByRole("button", { name: "Tutup" }).click();

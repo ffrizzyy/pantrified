@@ -50,6 +50,7 @@ export function FoodArt({
   scale = 0.72,
   cx = 60,
   cy = 34,
+  plain = false,
 }: {
   art: number;
   className?: string;
@@ -57,6 +58,7 @@ export function FoodArt({
   scale?: number;
   cx?: number;
   cy?: number;
+  plain?: boolean;
 }) {
   const id = useId().replace(/:/g, "");
   const [from, to] = PALETTES[art % PALETTES.length];
@@ -76,16 +78,20 @@ export function FoodArt({
           <stop offset="1" stopColor={to} />
         </linearGradient>
       </defs>
-      <rect width="120" height="90" fill={`url(#g-${id})`} />
-      <circle cx="100" cy="16" r="26" fill="#FFFFFF" opacity="0.06" />
-      <circle cx="18" cy="80" r="22" fill="#000000" opacity="0.06" />
+      {!plain && (
+        <>
+          <rect width="120" height="90" fill={`url(#g-${id})`} />
+          <circle cx="100" cy="16" r="26" fill="#FFFFFF" opacity="0.06" />
+          <circle cx="18" cy="80" r="22" fill="#000000" opacity="0.06" />
+        </>
+      )}
       <g
         fill="none"
-        stroke="#FAF7F0"
-        strokeWidth="3.2"
+        stroke={plain ? "currentColor" : "#FAF7F0"}
+        strokeWidth={plain ? 2.4 : 3.2}
         strokeLinecap="round"
         strokeLinejoin="round"
-        opacity="0.94"
+        opacity={plain ? 1 : 0.94}
         transform={`translate(${cx} ${cy}) scale(${scale}) translate(-60 -45)`}
       >
         {glyph}

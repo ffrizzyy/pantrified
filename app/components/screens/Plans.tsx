@@ -49,20 +49,22 @@ export function Plans({
             </div>
           ) : (
             <>
-              <section className="card budget-card">
-                <Ring
-                  value={cheapest}
-                  max={perMeal}
-                  over={over}
-                  label={copy.a11y.cheapest(rp(cheapest), rp(perMeal))}
-                />
-                <div>
-                  <span className="muted small">{copy.plans.cheapest}</span>
-                  <strong className="big-money">{rp(cheapest)}</strong>
-                  <span className="muted small">{copy.plans.ofBudget(rp(perMeal))}</span>
-                </div>
-                <span className={`tag ${over ? "tag-danger" : "tag-ok"}`}>{status}</span>
-              </section>
+              {cheapest > 0 && (
+                <section className="card budget-card">
+                  <Ring
+                    value={cheapest}
+                    max={perMeal}
+                    over={over}
+                    label={copy.a11y.cheapest(rp(cheapest), rp(perMeal))}
+                  />
+                  <div>
+                    <span className="muted small">{copy.plans.cheapest}</span>
+                    <strong className="big-money">{rp(cheapest)}</strong>
+                    <span className="muted small">{copy.plans.ofBudget(rp(perMeal))}</span>
+                  </div>
+                  <span className={`tag ${over ? "tag-danger" : "tag-ok"}`}>{status}</span>
+                </section>
+              )}
 
               <div className="plan-list">
                 {plans.map((plan, index) => (
