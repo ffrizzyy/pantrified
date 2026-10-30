@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import { Pwa } from "@/components/Pwa";
+import { withBasePath } from "@/lib/basePath";
 import "./globals.css";
 
 const sans = Plus_Jakarta_Sans({
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
   title: "Pantrified",
   applicationName: "Pantrified",
   description: "Foto kulkas jadi tiga rencana makan dan satu daftar belanja sesuai budget.",
-  manifest: "/manifest.webmanifest",
+  manifest: withBasePath("/manifest.webmanifest"),
   appleWebApp: {
     capable: true,
     title: "Pantrified",
@@ -29,8 +30,8 @@ export const metadata: Metadata = {
   },
   formatDetection: { telephone: false },
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    apple: "/icon-192.png",
+    icon: [{ url: withBasePath("/icon.svg"), type: "image/svg+xml" }],
+    apple: withBasePath("/icon-192.png"),
   },
 };
 

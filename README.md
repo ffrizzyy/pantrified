@@ -4,6 +4,8 @@
 
 Pantrified is a mobile-first PWA for students and young professionals who open the fridge, feel stuck, and end up ordering delivery. It reads the ingredients you already have, fits three meals to a daily budget in rupiah, and costs only the top-up shop.
 
+**Live demo:** <https://ffrizzyy.github.io/pantrified/> — installable, offline-capable, no account.
+
 [![Next.js](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs&logoColor=white)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-087ea4?logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-7-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
@@ -69,6 +71,7 @@ npm run validate:data
 | 3D hero | three.js, desktop only, lazy-loaded, pauses offscreen |
 | Share card | fabric.js, drawn locally at 1080×1350 and exported as PNG |
 | Persistence | `localStorage` (`pantrified.v1`), service worker, web app manifest |
+| Hosting | GitHub Pages via GitHub Actions, built with `/pantrified` base path |
 | QA | Data validator before every build, 36 Playwright flow/offline/PWA checks, responsive audit at 320–1200px |
 
 There are no runtime environment variables, API keys, or servers. Any static host works; installability needs HTTPS or `localhost`.
@@ -104,6 +107,19 @@ npm run responsive     # 320/360/768/1024/1200 audit: overflow, labels, tap targ
 
 All scripts accept `BASE_URL` (default `http://127.0.0.1:4173/`). Run them one at a time; the bundled Python preview server is single-threaded.
 
+## Deploy
+
+Every push to `main` runs `.github/workflows/deploy-pages.yml`: install, validate the data, build the static export with `NEXT_PUBLIC_BASE_PATH=/pantrified`, and publish `app/out` to GitHub Pages. Pull requests and local builds stay at the root path.
+
+To reproduce the Pages build locally:
+
+```bash
+cd app
+NEXT_PUBLIC_BASE_PATH=/pantrified npm run build
+```
+
+The app, manifest, and service worker all derive their URLs from that one value, so the same export works at a domain root or a subpath. The service worker scope and offline shell follow the deployment path instead of assuming `/`.
+
 ## Project layout
 
 ```
@@ -114,6 +130,7 @@ Pantrified/
     lib/                copy, types, recipe data, ingredient search, detector, planner, storage
     public/             manifest, service worker, icons
     scripts/            Playwright QA and screenshot scripts
+  .github/workflows/    GitHub Pages build and deploy
   docs/screenshots/     README images
   PRD.md                product requirements, design system, architecture, roadmap
   PANTRIFIED_SPEC.md    build spec and phased plan

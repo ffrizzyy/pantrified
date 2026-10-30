@@ -1,5 +1,13 @@
-const CACHE = "pantrified-v1";
-const SHELL = ["/", "/manifest.webmanifest", "/icon.svg", "/icon-192.png", "/icon-512.png"];
+const WORKER_PATH = self.location.pathname;
+const BASE = WORKER_PATH.slice(0, WORKER_PATH.lastIndexOf("/") + 1);
+const CACHE = "pantrified-v2";
+const SHELL = [
+  BASE,
+  `${BASE}manifest.webmanifest`,
+  `${BASE}icon.svg`,
+  `${BASE}icon-192.png`,
+  `${BASE}icon-512.png`,
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -32,10 +40,10 @@ self.addEventListener("fetch", (event) => {
       fetch(request)
         .then((response) => {
           const copy = response.clone();
-          caches.open(CACHE).then((cache) => cache.put("/", copy));
+          caches.open(CACHE).then((cache) => cache.put(BASE, copy));
           return response;
         })
-        .catch(() => caches.match("/")),
+        .catch(() => caches.match(BASE)),
     );
     return;
   }
@@ -46,7 +54,7 @@ self.addEventListener("fetch", (event) => {
       return fetch(request).then((response) => {
         const cacheable =
           response.ok &&
-          (url.pathname.startsWith("/_next/") ||
+          (url.pathname.startsWith(`${BASE}_next/`) ||
             /\.(png|svg|css|js|woff2|webmanifest)$/.test(url.pathname));
         if (cacheable) {
           const copy = response.clone();

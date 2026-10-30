@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
+import { withBasePath } from "@/lib/basePath";
 
 export function Pwa() {
   useEffect(() => {
     if (!("serviceWorker" in navigator)) return;
     const register = () => {
-      navigator.serviceWorker.register("/sw.js").catch(() => {
-        // A failed registration must not block the app.
-      });
+      navigator.serviceWorker
+        .register(withBasePath("/sw.js"), { scope: `${withBasePath("/")}` })
+        .catch(() => {
+          // A failed registration must not block the app.
+        });
     };
     if (document.readyState === "complete") {
       register();

@@ -21,6 +21,14 @@ npm run build          # writes out/
 npx serve out          # or: python -m http.server 4173 --directory out
 ```
 
+For a subpath deployment such as GitHub Pages at `/pantrified/`, set the base path before building:
+
+```powershell
+$env:NEXT_PUBLIC_BASE_PATH='/pantrified'; npm run build
+```
+
+The app, manifest, and service worker all read that value: Next uses it as `basePath`, metadata links are prefixed, the service worker registers at the scoped path, and the offline shell is cached relative to it. Leaving it unset builds for a domain root.
+
 The build is a static export, so any static host works. Installability needs HTTPS or `localhost`; the service worker and manifest are already wired.
 
 ## What is real and what is not
@@ -47,7 +55,7 @@ app/
   components/screens/  Home, Review, Constraints, Plans, Detail, Grocery, Settings
   components/three/    PantryScene (three.js desktop hero)
   lib/            copy (every UI string), types, data (50 ingredients, 50 recipes, 50 prices),
-                  ingredients (alias search), detect, plan, format, store, useMedia
+                  ingredients (alias search), basePath, detect, plan, format, store, useMedia
   public/         manifest, service worker, icons
   scripts/        make_icons.py, validate-data.ts, shot.mjs, shot-desktop.mjs, check.mjs, responsive.mjs
 ```
