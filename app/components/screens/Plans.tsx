@@ -7,6 +7,11 @@ import { FoodArt } from "../FoodArt";
 import { Icon } from "../Icon";
 import { Ring } from "../Ring";
 
+function missingLabel(plan: Plan) {
+  const n = plan.missing.filter((item) => item.missing > 0).length;
+  return n > 0 ? copy.plans.missing(n) : copy.plans.complete;
+}
+
 export function Plans({
   plans,
   profile,
@@ -100,7 +105,7 @@ export function Plans({
                         </span>
                         <span className="pill">
                           <Icon name="basket" size={14} />
-                          {copy.plans.missing(plan.missing.filter((m) => m.cost > 0).length)}
+                          {missingLabel(plan)}
                         </span>
                       </div>
                       <div className="use-row">
@@ -111,7 +116,7 @@ export function Plans({
                       </div>
                       <div className="plan-foot">
                         <div>
-                          <span className="muted small">{copy.plans.shopping}</span>
+                          <span className="muted small">{plan.cost > 0 ? copy.plans.shopping : copy.plans.noShopping}</span>
                           <strong className="money">{rp(plan.cost)}</strong>
                         </div>
                         <button type="button" className="btn btn-primary" onClick={() => onSelect(plan.recipe.id)}>
@@ -128,7 +133,7 @@ export function Plans({
                 ))}
               </div>
 
-              <button type="button" className="btn btn-ghost btn-block" onClick={onAdjust}>
+              <button type="button" className="btn btn-ghost btn-block mob" onClick={onAdjust}>
                 {copy.plans.adjust}
               </button>
             </>

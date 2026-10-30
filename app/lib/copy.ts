@@ -65,14 +65,14 @@ export const copy = {
       },
       {
         title: "3. Cukup beli kurangnya",
-        body: "Daftar belanjaan otomatis dibuat hanya untuk bahan yang belum ada.",
+        body: "Daftar belanja otomatis dibuat hanya untuk bahan yang belum ada.",
       },
     ],
     budgetNote: (budget: string) => `Budget awal ${budget} per hari. Bisa kamu sesuaikan di langkah berikutnya, kok.`,
-    stats: [
+    stats: (recipes: number, ingredients: number) => [
       { value: "3", label: "pilihan menu per sesi" },
-      { value: "23", label: "resep andalan" },
-      { value: "37", label: "pilihan bahan" },
+      { value: String(recipes), label: "resep andalan" },
+      { value: String(ingredients), label: "pilihan bahan" },
     ],
     sceneCaption: "Ilustrasi 3D isi dapur",
   },
@@ -84,6 +84,7 @@ export const copy = {
     sub: (count: number, label: string) =>
       `${count} bahan siap pakai dari ${label}. Hapus kalau ada yang keliru, atau tambah kalau kurang ya.`,
     subLead: (count: number) => `${count} bahan siap pakai dari `,
+    subCheck: (count: number) => `${count} bahan perlu dicek`,
     subTail: ". Hapus kalau ada yang keliru, atau tambah kalau kurang ya.",
     ignored: (n: number) => `${n} bahan dengan tingkat kecocokan rendah disembunyikan.`,
     empty: "Belum ada bahan nih. Yuk, tambah satu-satu.",
@@ -137,15 +138,17 @@ export const copy = {
     back: "Ubah budget",
     title: "Pilihan menu untukmu",
     sub: (perMeal: string, cook: number) =>
-      `Diracik dari bahanmu, budget ${perMeal} per porsi, dan waktu masak sekitar ${cook} menit.`,
+      `Diracik dari bahanmu, budget ${perMeal} per porsi, dan waktu masak maksimal ${cook} menit.`,
     cheapest: "Paling hemat",
     ofBudget: (perMeal: string) => `dari ${perMeal} per porsi`,
     tagOver: "Sedikit lewat budget",
     tagOk: "Pas di budget",
     tagStock: "Stok kulkas aman",
     missing: (n: number) => `Kurang ${n} bahan`,
+    complete: "Bahan lengkap",
     have: (pct: string) => `${pct} bahan sudah ada`,
     shopping: "Belanja dulu",
+    noShopping: "Tanpa belanja",
     emptyTitle: "Belum ketemu yang pas nih",
     emptyBody: "Coba longgarkan sedikit waktu masak, tambah alat dapur, atau naikkan budgetnya ya.",
     emptyCta: "Ubah Batasan",
@@ -170,7 +173,7 @@ export const copy = {
 
   grocery: {
     back: "Kembali ke resep",
-    title: "Daftar belanjaan",
+    title: "Daftar belanja",
     sub: (recipe: string, servings: number) => `${recipe} · ${servings} porsi`,
     total: "Total estimasi belanja",
     totalMeta: (count: number, date: string) => `${count} bahan · patokan harga per ${date}`,
@@ -179,6 +182,7 @@ export const copy = {
     haveCount: (n: number) => `${n} bahan`,
     packs: (n: number) => `${n} bungkus`,
     leftover: (qty: string) => `sisa ${qty}`,
+    noPrice: "Harga belum ada",
     copy: "Salin teks untuk WhatsApp",
     csv: "Unduh format CSV",
     share: "Bikin kartu belanja",
@@ -207,7 +211,7 @@ export const copy = {
     aboutBody: (date: string) =>
       `Proyek tugas akhir demo. Deteksi bahan menggunakan simulasi, dan patokan harga per ${date}.`,
     aboutFine: (recipes: number, ingredients: number) =>
-      `Berisi ${recipes} resep contoh dan ${ingredients} data bahan. Foto kamu aman dan tidak disimpan di server mana pun.`,
+      `Berisi ${recipes} resep contoh dan ${ingredients} bahan. Foto kamu aman dan tidak disimpan di server mana pun.`,
     confirmDelete: "Yakin ingin menghapus semua data di perangkat ini?",
     sectionData: "Data & Privasi",
     sectionApp: "Aplikasi",

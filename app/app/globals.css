@@ -952,6 +952,15 @@ a {
   border-color: var(--primary);
 }
 
+.item-row.is-check .check {
+  background: var(--tint-amber);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .item-main {
   grid-area: main;
   min-width: 0;
@@ -2690,6 +2699,76 @@ a {
   .share-actions .btn {
     width: auto;
     min-width: 160px;
+  }
+}
+
+/* 1024–1359px: the desktop shell is on, but the content column is too narrow
+   for three plan columns, divided form cards, or the 21:8 detail hero. */
+@media (min-width: 1024px) and (max-width: 1359px) {
+  .plan-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-copy {
+    max-width: none;
+    padding: 40px;
+  }
+
+  .hero-visual {
+    min-height: 320px;
+  }
+
+  .form-grid,
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid .span-2 {
+    grid-column: auto;
+  }
+
+  .detail-hero {
+    aspect-ratio: 16 / 9;
+  }
+
+  .detail-title {
+    padding: 22px 24px;
+  }
+
+  .detail-title h1 {
+    font-size: 34px;
+  }
+}
+
+/* 1024–1199px: drop the rail and let the single content column breathe. */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .main {
+    padding: 0 28px 64px;
+  }
+
+  .screen-title {
+    font-size: 34px;
+  }
+
+  .screen-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .rail {
+    display: none;
+  }
+
+  .action-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .action-row .btn:first-child {
+    grid-column: span 2;
   }
 }
 

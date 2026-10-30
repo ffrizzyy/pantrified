@@ -50,6 +50,7 @@ export function Review({
           <p className="screen-sub">
             {copy.review.subLead(active.length)}
             <strong>{detectionLabel}</strong>
+            {checkCount > 0 && `, ${copy.review.subCheck(checkCount)}`}
             {copy.review.subTail}
           </p>
 
@@ -71,7 +72,7 @@ export function Review({
                 return (
                   <div
                     key={item.id}
-                    className={`item-row ${off ? "is-off" : ""}`}
+                    className={`item-row ${off ? "is-off" : ""} ${state === "check" && !off ? "is-check" : ""}`}
                     style={{ animationDelay: `${Math.min(index * 24, 240)}ms` }}
                   >
                     <button
@@ -82,7 +83,7 @@ export function Review({
                       className="check"
                       onClick={() => onToggle(item.id)}
                     >
-                      {!off && <Icon name="check" size={14} />}
+                      {!off && (state === "check" ? <span aria-hidden="true">?</span> : <Icon name="check" size={14} />)}
                     </button>
                     <div className="item-main">
                       <span className="item-name">{ing?.name ?? item.id}</span>

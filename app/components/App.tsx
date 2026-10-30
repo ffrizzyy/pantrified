@@ -217,7 +217,7 @@ export default function App() {
         onNew={() => setSheet("start")}
         itemCount={activeItems.length}
         planCount={plans.length}
-        listCount={selectedPlan ? selectedPlan.missing.filter((item) => item.cost > 0).length : 0}
+        listCount={selectedPlan ? selectedPlan.missing.filter((item) => item.missing > 0).length : 0}
         budget={profile.budget}
         onResume={resume}
       />

@@ -7,6 +7,7 @@
     "build": "next build",
     "preview": "python -m http.server 4173 --directory out",
     "shots": "node scripts/shot.mjs",
+    "responsive": "node scripts/responsive.mjs",
     "check": "node scripts/check.mjs"
   },
   "dependencies": {

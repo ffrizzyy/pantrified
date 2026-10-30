@@ -1,6 +1,6 @@
 import { chromium } from "@playwright/test";
 
-const BASE = "http://127.0.0.1:4173/";
+const BASE = process.env.BASE_URL ?? "http://127.0.0.1:4173/";
 const browser = await chromium.launch();
 const context = await browser.newContext({
   viewport: { width: 390, height: 844 },
@@ -104,6 +104,8 @@ await page.getByRole("button", { name: /buatkan 3 pilihan menu/i }).click();
 await page.waitForTimeout(500);
 const plans = await page.locator(".plan-card").count();
 check("three plans", plans === 3, `${plans} plans`);
+const zeroMissing = await page.locator(".plan-card .pill", { hasText: "Kurang 0 bahan" }).count();
+check("no empty 'kurang 0 bahan' pill", zeroMissing === 0, `${zeroMissing} found`);
 
 // detail + steps
 await page.locator(".plan-card").nth(1).locator(".plan-foot .btn").click();
@@ -143,6 +145,16 @@ await page.getByRole("button", { name: /Hapus semua data/ }).click();
 await page.waitForTimeout(400);
 const cleared = await page.locator(".wordmark").count();
 check("clear data returns home", cleared === 1);
+
+// low-confidence review state
+await page.locator(".sample-card").first().click();
+await page.waitForTimeout(400);
+const checkRows = await page.locator(".item-row.is-check").count();
+check("uncertain items are flagged", checkRows === 2, `${checkRows} flagged`);
+const reviewSub = await page.locator(".screen-sub").textContent();
+check("review counts items to check", /2 bahan perlu dicek/.test(reviewSub ?? ""), reviewSub ?? "");
+const checkGlyph = await page.locator(".item-row.is-check .check").first().textContent();
+check("uncertain item shows a question mark", checkGlyph?.trim() === "?", String(checkGlyph));
 
 // ---------------------------------------------------------------- desktop
 const deskContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });

@@ -3,6 +3,8 @@ import { mkdirSync } from "node:fs";
 
 mkdirSync("shots", { recursive: true });
 
+const BASE = process.env.BASE_URL ?? "http://127.0.0.1:4173/";
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
 const errors = [];
@@ -26,7 +28,7 @@ async function shot(name) {
   });
 }
 
-await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
+await page.goto(BASE, { waitUntil: "networkidle" });
 await page.waitForTimeout(700);
 await shot("01-home");
 
@@ -80,7 +82,7 @@ console.log("plan cards:", planCount);
 console.log("console errors:", errors.length ? errors : "none");
 
 // sheets
-await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
+await page.goto(BASE, { waitUntil: "networkidle" });
 await page.waitForTimeout(500);
 await page.getByRole("button", { name: /Mulai dari Foto Kulkas/ }).click();
 await page.waitForTimeout(400);
@@ -98,6 +100,14 @@ await page.waitForTimeout(300);
 
 const ctaBox = await page.locator(".sticky-cta").boundingBox();
 console.log("sticky cta bottom:", ctaBox ? Math.round(ctaBox.y + ctaBox.height) : "none", "viewport:", page.viewportSize().height);
+
+// empty state
+await page.evaluate(() => localStorage.clear());
+await page.reload({ waitUntil: "networkidle" });
+await page.waitForTimeout(500);
+await page.locator(".tabbar .tab", { hasText: "Belanja" }).click();
+await page.waitForTimeout(400);
+await shot("12-empty");
 
 await browser.close();
 

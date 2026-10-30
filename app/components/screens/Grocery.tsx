@@ -22,8 +22,8 @@ export function Grocery({
   onCsv: () => void;
   onShare: () => void;
 }) {
-  const buy = plan.missing.filter((item) => item.cost > 0);
-  const have = plan.missing.filter((item) => item.cost === 0);
+  const buy = plan.missing.filter((item) => item.missing > 0);
+  const have = plan.missing.filter((item) => item.missing === 0);
   const total = groceryTotal(plan);
   const shown = useCountUp(total);
 
@@ -63,7 +63,7 @@ export function Grocery({
                       {item.leftover > 0 ? ` · ${copy.grocery.leftover(fmtQty(item.leftover, item.unit))}` : ""}
                     </span>
                   </div>
-                  <span className="grocery-cost">{rp(item.cost)}</span>
+                  <span className="grocery-cost">{item.cost > 0 ? rp(item.cost) : copy.grocery.noPrice}</span>
                 </div>
               ))
             )}

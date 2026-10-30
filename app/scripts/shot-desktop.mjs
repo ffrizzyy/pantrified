@@ -3,6 +3,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 
 mkdirSync("shots", { recursive: true });
 
+const BASE = process.env.BASE_URL ?? "http://127.0.0.1:4173/";
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1.5 });
 const errors = [];
@@ -13,7 +15,7 @@ page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
 
 const shot = (name) => page.screenshot({ path: `shots/desk-${name}.png` });
 
-await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
+await page.goto(BASE, { waitUntil: "networkidle" });
 await page.waitForTimeout(1800);
 
 const scene = await page.locator(".hero-scene canvas").count();

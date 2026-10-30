@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { SAMPLES } from "@/lib/data";
+import { INGREDIENTS, RECIPES, SAMPLES } from "@/lib/data";
 import { copy } from "@/lib/copy";
 import { rp } from "@/lib/format";
 import { useMediaQuery } from "@/lib/useMedia";
@@ -112,7 +112,7 @@ export function Home({
       </section>
 
       <div className="stats-row desk">
-        {copy.home.stats.map((stat) => (
+        {copy.home.stats(RECIPES.length, INGREDIENTS.length).map((stat) => (
           <div key={stat.label} className="stat">
             <strong>{stat.value}</strong>
             <span>{stat.label}</span>
