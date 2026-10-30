@@ -2,6 +2,8 @@
 
 Installable PWA for Pantrified. Next.js 16 static export, no backend, no Tailwind. All state lives in `localStorage` under `pantrified.v1`.
 
+Project overview, screenshots, and license: [root README](../README.md).
+
 ## Run it
 
 ```powershell
