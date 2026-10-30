@@ -1,9 +1,10 @@
 ﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { EQUIPMENT, INGREDIENTS, SAMPLES, ingredientById } from "@/lib/data";
+import { EQUIPMENT, SAMPLES, ingredientById } from "@/lib/data";
 import { copy } from "@/lib/copy";
 import { detectSample } from "@/lib/detect";
+import { searchIngredients } from "@/lib/ingredients";
 import type { DetectionResult } from "@/lib/types";
 import { FoodArt } from "./FoodArt";
 import { Icon } from "./Icon";
@@ -130,10 +131,7 @@ export function AddItemSheet({
 }) {
   const [query, setQuery] = useState("");
   const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return INGREDIENTS.filter(
-      (ing) => !existing.includes(ing.id) && (q === "" || ing.name.toLowerCase().includes(q)),
-    ).slice(0, 12);
+    return searchIngredients(query, 12, existing);
   }, [query, existing]);
 
   return (

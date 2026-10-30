@@ -46,6 +46,19 @@ Pantrified does exactly that, in Indonesian, with Jakarta price data.
 - **Two real layouts.** A 390px-first mobile flow with a tab bar and sticky CTAs, and a desktop shell from 1024px with a sidebar, rails, a three.js pantry still-life, and a two- or three-column plan grid.
 - **Finishing touches that ship.** WhatsApp text export, CSV download, a 1080×1350 fabric.js share card, analytics consent gate, data export, and delete-everything.
 
+## Knowledge base
+
+The app ships with its own Indonesian food data, not a scraped recipe dump:
+
+- **50 ingredient classes** with Indonesian names, search aliases (`tempeh`, `chayote`, `scallion`), categories, allergens, and kcal per 100 g.
+- **50 recipes** across vegetables, eggs, tempe, tofu, chicken, fish, beef, rice, noodles, and breakfast, each with servings, cook time, equipment, diet tags, steps, and nutrition.
+- **50 dated Jakarta price rows** with pack sizes, so the grocery list rounds to what a shop actually sells.
+- **A validator** that runs before every production build: unique IDs and titles, valid units and equipment, real quantities, known ingredients, price math, dated prices, and ingredient coverage.
+
+```bash
+npm run validate:data
+```
+
 ## Tech stack
 
 | Layer | Choice |
@@ -56,7 +69,7 @@ Pantrified does exactly that, in Indonesian, with Jakarta price data.
 | 3D hero | three.js, desktop only, lazy-loaded, pauses offscreen |
 | Share card | fabric.js, drawn locally at 1080×1350 and exported as PNG |
 | Persistence | `localStorage` (`pantrified.v1`), service worker, web app manifest |
-| QA | Playwright screenshots, 34 flow/offline/PWA checks, responsive audit at 320–1200px |
+| QA | Data validator before every build, 36 Playwright flow/offline/PWA checks, responsive audit at 320–1200px |
 
 There are no runtime environment variables, API keys, or servers. Any static host works; installability needs HTTPS or `localhost`.
 
@@ -82,7 +95,8 @@ npm run preview        # serves out/ at http://127.0.0.1:4173/
 
 ```bash
 cd app
-npm run check          # 34 Playwright checks: PWA, offline, upload, plans, CSV, share card, desktop
+npm run validate:data  # ingredients, prices, recipes: IDs, units, price math, coverage
+npm run check          # 36 Playwright checks: PWA, offline, upload, alias search, plans, CSV, share card, desktop
 npm run shots          # mobile screenshots of every screen, fails on console errors
 node scripts/shot-desktop.mjs   # desktop flow incl. 3D hero and share card
 npm run responsive     # 320/360/768/1024/1200 audit: overflow, labels, tap targets
@@ -97,7 +111,7 @@ Pantrified/
   app/                  Next.js PWA (see app/README.md for the full map)
     app/                layout, page, global styles and design tokens
     components/         shell, screens, share card, icons, illustrations, three.js scene
-    lib/                copy, types, recipe data, detector, planner, storage
+    lib/                copy, types, recipe data, ingredient search, detector, planner, storage
     public/             manifest, service worker, icons
     scripts/            Playwright QA and screenshot scripts
   docs/screenshots/     README images
@@ -112,7 +126,7 @@ Pantrified/
 This is a working portfolio MVP, not a launched product.
 
 - **Ingredient detection is simulated.** `lib/detect.ts` hashes the uploaded file and replays a seeded fridge scene. The image never leaves the device. The interface already consumes a `DetectionResult`, so a real model can replace it without touching the rest of the app.
-- **The recipe set is 23 of the 150 planned**, and prices are a single sample table dated 2026-10-27, not a live feed.
+- **The recipe set is 50 of the 150 planned**, and prices are a single sample table of 50 rows dated 2026-10-27, not a live feed.
 - **No accounts, sync, or push notifications.** Data is per device and can be exported or deleted from Settings.
 - **Mobile Safari and Chrome are the targets.** The 3D hero is decorative and desktop-only; the app is fully usable without it.
 

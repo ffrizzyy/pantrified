@@ -5,6 +5,7 @@ export type Category = "protein" | "sayur" | "bumbu" | "buah" | "susu" | "pokok"
 export interface Ingredient {
   id: string;
   name: string;
+  aliases: string[];
   unit: Unit;
   category: Category;
   assumed: boolean;

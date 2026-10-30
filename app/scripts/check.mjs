@@ -81,6 +81,15 @@ await page.waitForTimeout(300);
 const afterAdd = await page.locator(".item-row").count();
 check("add ingredient works", afterAdd === itemCount + 1, `${afterAdd} items`);
 
+await page.getByRole("button", { name: /Tambah bahan/ }).click();
+await page.waitForTimeout(300);
+await page.getByRole("searchbox").fill("chayote");
+await page.waitForTimeout(200);
+const aliasLabel = await page.locator(".add-row .add-name strong").first().textContent();
+check("alias search finds labu siam", aliasLabel === "Labu siam", String(aliasLabel));
+await page.keyboard.press("Escape");
+await page.waitForTimeout(200);
+
 // equipment sheet
 await page.getByRole("button", { name: /lanjut atur budget/i }).click();
 await page.waitForTimeout(300);
@@ -169,6 +178,8 @@ await desk.waitForTimeout(500);
 
 check("desktop sidebar visible", await desk.locator(".sidebar").isVisible());
 check("desktop tab bar hidden", !(await desk.locator(".tabbar").isVisible()));
+const deskStats = await desk.locator(".stats-row.desk").textContent();
+check("stats reflect the knowledge base", (deskStats ?? "").includes("50"), (deskStats ?? "").replace(/\s+/g, " ").trim());
 const scene = await desk.locator(".hero-scene canvas").boundingBox();
 check("desktop 3d scene renders", Boolean(scene && scene.width > 200 && scene.height > 200), scene ? `${Math.round(scene.width)}x${Math.round(scene.height)}` : "none");
 

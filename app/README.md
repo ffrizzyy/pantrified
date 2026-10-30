@@ -46,15 +46,17 @@ app/
   components/     App shell, DesktopSidebar, ShareCard, Icon, FoodArt, Ring, Sheet, Pwa
   components/screens/  Home, Review, Constraints, Plans, Detail, Grocery, Settings
   components/three/    PantryScene (three.js desktop hero)
-  lib/            copy (every UI string), types, data (37 ingredients, 23 recipes, prices),
-                  detect, plan, format, store, useMedia (breakpoint, reduced motion, count-up)
+  lib/            copy (every UI string), types, data (50 ingredients, 50 recipes, 50 prices),
+                  ingredients (alias search), detect, plan, format, store, useMedia
   public/         manifest, service worker, icons
-  scripts/        make_icons.py, shot.mjs, shot-desktop.mjs, check.mjs, responsive.mjs
+  scripts/        make_icons.py, validate-data.ts, shot.mjs, shot-desktop.mjs, check.mjs, responsive.mjs
 ```
 
 ## Copy, graphics, and motion
 
 - **All UI copy lives in `lib/copy.ts`.** Brand, nav, screen titles, button labels, toasts, share-card text, and a11y labels come from that one file. Recipe and ingredient content stays in `lib/data.ts`.
+- **Ingredient search understands aliases.** `lib/ingredients.ts` normalizes case, punctuation, and spacing, then matches names and aliases such as `tempeh`, `chayote`, or `scallion`, so English or informal Indonesian still finds the right row.
+- **The data is validated before every build.** `scripts/validate-data.ts` checks unique IDs and titles, units, categories, allergens, price arithmetic, price dates, known ingredients, positive quantities, equipment, step counts, and ingredient coverage. Structural errors fail the build; targets not yet met are warnings.
 - **fabric.js** draws the share card (`components/ShareCard.tsx`) on a `StaticCanvas` at 1080×1350 and exports a PNG. It is imported dynamically, so it never ships in the first load. Light and dark palettes are defined in the component.
 - **three.js** powers the desktop-only pantry still-life (`components/three/PantryScene.tsx`): plate, food meshes, lights, pointer parallax. It loads via `next/dynamic` with `ssr: false`, only mounts at ≥1024px, pauses when offscreen or hidden, and renders a single frame under `prefers-reduced-motion`.
 - **Desktop UI** starts at `min-width: 1024px`: fixed sidebar with nav, new-plan CTA, and session card; sticky topbar; wide content with two-column screen grids and summary rails. The mobile tab bar and sticky CTAs are hidden there. Both layouts share the same screens and state. Between 1024 and 1359px the plan grid drops to two columns, the home hero stacks, and the forms and settings grids collapse to one column; between 1024 and 1199px the summary rail hides and the grocery actions go two-up with the primary button full width.
@@ -64,11 +66,12 @@ app/
 ## Checks
 
 ```powershell
+npm run validate:data          # data integrity: IDs, units, prices, dates, coverage
 node scripts/shot.mjs          # mobile flow incl. empty state, writes shots/*.png, fails on console errors
 node scripts/shot-desktop.mjs  # 1440×900 flow incl. 3D hero and share card, writes shots/desk-*.png
-node scripts/check.mjs         # 34 checks: PWA, offline, flow, clipboard, CSV, persistence,
-                               # review states, plan labels, desktop shell, 3D canvas,
-                               # share card size + PNG download
+node scripts/check.mjs         # 36 checks: PWA, offline, flow, clipboard, CSV, persistence,
+                               # review states, alias search, plan labels, desktop shell,
+                               # 3D canvas, share card size + PNG download
 node scripts/responsive.mjs    # 320/360/768/1024/1200 audit: overflow, label, target size,
                                # writes shots/resp-*.png
 ```
@@ -84,6 +87,7 @@ Run them one at a time: `python -m http.server` is single-threaded, so parallel 
 ## Known gaps
 
 - Detector is a stub; the PRD's M3 model work is not started.
-- Recipe set is 23 of the 150 the M2 gate asks for.
+- Recipe set is 50 of the 150 the M2 gate asks for; prices cover the same 50 ingredients.
+- Ingredient coverage is uneven: many classes appear in fewer than the target 8 recipes.
 - Prices are one sample table dated 2026-10-27, not a live feed.
 - No accounts, no sync, no push notifications.

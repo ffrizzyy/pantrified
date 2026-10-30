@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run validate:data && next build",
+    "validate:data": "tsx scripts/validate-data.ts",
     "preview": "python -m http.server 4173 --directory out",
     "shots": "node scripts/shot.mjs",
     "responsive": "node scripts/responsive.mjs",
@@ -23,6 +24,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/three": "^0.186.0",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }
