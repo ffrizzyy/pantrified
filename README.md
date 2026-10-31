@@ -48,7 +48,7 @@ Pantrified does exactly that, in Indonesian or English, with Jakarta price data.
 
 - **Budget as a hard constraint.** The planner scores recipes on pantry fit, cost, calories, diet, cook time, and equipment, then shows the three best options. Pack rounding and missing-only costing keep the total honest.
 - **Human in the loop.** The detector never silently decides. Low-confidence rows get an amber `?`, a "perlu dicek" tag, and a count in the header.
-- **Light and dark, Indonesian or English.** Both preferences live in Settings and persist on the device. The first visit follows the system colour scheme; the English interface translates UI copy only, while recipe and ingredient names stay Indonesian.
+- **Light and dark, Indonesian or English.** Light mode is the default for everyone. Both preferences live in Settings and persist on the device; the English interface translates UI copy only, while recipe and ingredient names stay Indonesian.
 - **Local-first and offline-ready.** No account, no backend, no upload. State lives in `localStorage`; the service worker keeps the shell usable offline.
 - **Designed for Indonesian kitchens.** Indonesian copy, rupiah formatting, local dishes and ingredients, and a fresh market visual language: cream paper, olive, sage, and orange in light mode, olive-black and lime in dark mode, Fraunces headings, Plus Jakarta Sans UI.
 - **Two real layouts.** A 390px-first mobile flow with a tab bar and sticky CTAs, and a desktop shell from 1024px with a sidebar, rails, a three.js pantry still-life, and a two- or three-column plan grid.

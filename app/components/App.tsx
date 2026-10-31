@@ -31,6 +31,7 @@ export default function App() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [detectionLabel, setDetectionLabel] = useState("");
+  const [detectionSample, setDetectionSample] = useState<string | null>(null);
   const [ignored, setIgnored] = useState(0);
   const [events, setEvents] = useState<FeedbackEvent[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -95,6 +96,7 @@ export default function App() {
       setPlans([]);
       setSelectedId(null);
       setDetectionLabel(result.label);
+      setDetectionSample(result.sampleId ?? null);
       setIgnored(result.ignored + (result.items.length - kept.length));
       setSheet(null);
       setScreen("review");
@@ -113,13 +115,17 @@ export default function App() {
 
   const startSample = useCallback(
     (id: string) => {
-      const label = copy.samples[id as keyof typeof copy.samples]?.label ?? id;
-      startDetection(detectSample(id, label));
+      startDetection(detectSample(id));
     },
-    [copy, startDetection],
+    [startDetection],
   );
 
   const activeItems = useMemo(() => items.filter((item) => !excluded.includes(item.id)), [items, excluded]);
+
+  const reviewLabel =
+    (detectionSample ? copy.samples[detectionSample as keyof typeof copy.samples]?.label : "") ||
+    detectionLabel ||
+    copy.review.photoLabel;
 
   const generate = useCallback(() => {
     const next = buildPlans(activeItems, profile);
@@ -263,7 +269,7 @@ export default function App() {
             <Review
               items={items}
               excluded={excluded}
-              detectionLabel={detectionLabel || copy.review.photoLabel}
+              detectionLabel={reviewLabel}
               ignored={ignored}
               onToggle={toggle}
               onQty={changeQty}

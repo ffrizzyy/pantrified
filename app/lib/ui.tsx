@@ -28,7 +28,7 @@ export function UiProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let nextLocale: Locale = "id";
-    let nextTheme: Theme = theme;
+    let nextTheme: Theme = "light";
     try {
       const storedLocale = window.localStorage.getItem(LOCALE_KEY);
       if (storedLocale === "id" || storedLocale === "en") nextLocale = storedLocale;
@@ -60,6 +60,8 @@ export function UiProvider({ children }: { children: React.ReactNode }) {
     const root = document.documentElement;
     root.dataset.theme = theme;
     root.style.colorScheme = theme;
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    if (meta) meta.content = theme === "dark" ? "#15180b" : "#fffff0";
     if (!ready) return;
     try {
       window.localStorage.setItem(THEME_KEY, theme);

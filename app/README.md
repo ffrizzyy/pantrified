@@ -40,7 +40,7 @@ The build is a static export, so any static host works. Installability needs HTT
 | Plan ranking, pack rounding, missing-only costing | Real |
 | Grocery list copy (WhatsApp text) and CSV download | Real |
 | Share card (fabric.js, PNG download) | Real, drawn locally at 1080×1350 |
-| Light / dark theme, Indonesian / English UI | Real, stored on the device; system colour scheme on first visit |
+| Light / dark theme, Indonesian / English UI | Real, light is the default; preferences are stored on the device |
 | Desktop 3D hero (three.js) | Real, decorative only, pauses offscreen |
 | Local persistence, analytics consent gate, data export, delete | Real |
 | Ingredient detection | **Simulated.** `lib/detect.ts` hashes the file and replays a seeded fridge scene. The image is never read or uploaded. |
@@ -65,7 +65,7 @@ app/
 ## Copy, graphics, and motion
 
 - **All UI copy lives in `lib/copy.ts`.** Brand, nav, screen titles, button labels, toasts, share-card text, and a11y labels come from two dictionaries with an identical shape: `id` (default) and `en`. Recipe and ingredient content stays in `lib/data.ts`. Components read the active dictionary through `useCopy()` from `lib/ui.tsx`; the exported `copy` constant is the Indonesian default for modules that run outside React.
-- **Theme and language are device preferences.** `lib/ui.tsx` stores `pantrified.theme` and `pantrified.locale`, updates `<html lang>` and `data-theme`, and falls back to the system colour scheme when no theme has been chosen. A small pre-hydration script in `app/layout.tsx` applies both before first paint.
+- **Theme and language are device preferences.** `lib/ui.tsx` stores `pantrified.theme` and `pantrified.locale`, updates `<html lang>` and `data-theme`, and keeps light mode as the default until the user chooses dark. A small pre-hydration script in `app/layout.tsx` applies both before first paint.
 - **The app icon is the logo.** `public/icon.svg` is the favicon, the mobile home mark, and the desktop sidebar mark, so branding stays consistent with the installed app.
 - **Sample fridges use emoji cards.** The three sample-card illustrations and start-sheet thumbnails are emoji (`🍳`, `🍚`, `🥗`) defined with the sample labels in `lib/copy.ts`, so they translate with the interface.
 - **Ingredient search understands aliases.** `lib/ingredients.ts` normalizes case, punctuation, and spacing, then matches names and aliases such as `tempeh`, `chayote`, or `scallion`, so English or informal Indonesian still finds the right row.

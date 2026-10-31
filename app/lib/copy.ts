@@ -10,6 +10,11 @@
 
 import type { Unit } from "./types";
 
+/** English count phrases: pick the singular noun only when the count is exactly one. */
+function plural(n: number, one: string, many: string): string {
+  return `${n} ${n === 1 ? one : many}`;
+}
+
 const id = {
   brand: {
     name: "Pantrified",
@@ -404,8 +409,8 @@ export const en: Copy = {
     decrease: "Decrease",
     increase: "Increase",
     perPortion: "per serving",
-    portions: (n: number) => `${n} servings`,
-    minutes: (n: number) => `${n} minutes`,
+    portions: (n: number) => plural(n, "serving", "servings"),
+    minutes: (n: number) => plural(n, "minute", "minutes"),
     minutesShort: (n: number) => `${n} min`,
     kcal: (n: number) => `${n} kcal`,
     rupiahPrefix: "Rp",
@@ -469,11 +474,11 @@ export const en: Copy = {
     title: "Let's check the ingredients",
     photoLabel: "photo",
     sub: (count: number, label: string) =>
-      `${count} ingredients ready from ${label}. Remove anything wrong, or add what's missing.`,
-    subLead: (count: number) => `${count} ingredients ready from `,
-    subCheck: (count: number) => `${count} need a check`,
+      `${plural(count, "ingredient", "ingredients")} ready from ${label}. Remove anything wrong, or add what's missing.`,
+    subLead: (count: number) => `${plural(count, "ingredient", "ingredients")} ready from `,
+    subCheck: (count: number) => `${count} ${count === 1 ? "needs" : "need"} a check`,
     subTail: ". Remove anything wrong, or add what's missing.",
-    ignored: (n: number) => `${n} low-confidence ingredients hidden.`,
+    ignored: (n: number) => `${plural(n, "low-confidence ingredient", "low-confidence ingredients")} hidden.`,
     empty: "No ingredients yet. Add them one by one.",
     add: "Add ingredient",
     continue: "Next: Set Budget",
@@ -491,12 +496,13 @@ export const en: Copy = {
   constraints: {
     back: "Back",
     title: "Set budget & preferences",
-    sub: (n: number) => `${n} ingredients ready to cook. Set the limits and we'll build the best menu.`,
+    sub: (n: number) =>
+      `${plural(n, "ingredient", "ingredients")} ready to cook. Set the limits and we'll build the best menu.`,
     budgetLabel: "Food budget per day",
     budgetNote: (meals: number, perMeal: string) =>
-      `For ${meals} meals, about ${perMeal} per serving.`,
+      `For ${plural(meals, "meal", "meals")}, about ${perMeal} per serving.`,
     mealsLabel: "How many meals?",
-    meals: (n: number) => `${n} meals`,
+    meals: (n: number) => plural(n, "meal", "meals"),
     kcalLabel: "Calorie target per serving",
     kcalOption: (n: number) => `${n} kcal`,
     dietLabel: "Diet preference",
@@ -531,7 +537,7 @@ export const en: Copy = {
     tagOver: "A little over budget",
     tagOk: "Within budget",
     tagStock: "Fridge stock covers it",
-    missing: (n: number) => `${n} ingredients short`,
+    missing: (n: number) => `${plural(n, "ingredient", "ingredients")} short`,
     complete: "All ingredients ready",
     have: (pct: string) => `${pct} of ingredients on hand`,
     shopping: "Shop first",
@@ -552,22 +558,23 @@ export const en: Copy = {
     tabIngredients: "Ingredients",
     tabSteps: "How to cook",
     priceNote: (servings: number) =>
-      `Estimated price for ${servings} servings. Everyday staples are assumed to be available.`,
+      `Estimated price for ${plural(servings, "serving", "servings")}. Everyday staples are assumed to be available.`,
     cta: (cost: string | null) => (cost ? `Make grocery list · ${cost}` : "View grocery list"),
     meta: (servings: number, minutes: number, kcal: number) =>
-      `${servings} servings · ${minutes} min · ${kcal} kcal`,
+      `${plural(servings, "serving", "servings")} · ${minutes} min · ${kcal} kcal`,
   },
 
   grocery: {
     back: "Back to recipe",
     title: "Grocery list",
-    sub: (recipe: string, servings: number) => `${recipe} · ${servings} servings`,
+    sub: (recipe: string, servings: number) => `${recipe} · ${plural(servings, "serving", "servings")}`,
     total: "Estimated grocery total",
-    totalMeta: (count: number, date: string) => `${count} ingredients · prices as of ${date}`,
+    totalMeta: (count: number, date: string) =>
+      `${plural(count, "ingredient", "ingredients")} · prices as of ${date}`,
     allHave: "Nice, everything is already in your fridge. Time to cook!",
     haveTitle: "Already in the fridge",
-    haveCount: (n: number) => `${n} ingredients`,
-    packs: (n: number) => `${n} packs`,
+    haveCount: (n: number) => plural(n, "ingredient", "ingredients"),
+    packs: (n: number) => plural(n, "pack", "packs"),
     leftover: (qty: string) => `extra ${qty}`,
     noPrice: "No price yet",
     copy: "Copy text for WhatsApp",
@@ -587,7 +594,7 @@ export const en: Copy = {
     sub: "Manage your data, appearance, language, and kitchen equipment.",
     analyticsTitle: "Help improve the app (Analytics)",
     analyticsBody: "Off by default. No photos or personal data are uploaded.",
-    events: (n: number) => `${n} events saved on your device.`,
+    events: (n: number) => `${plural(n, "event", "events")} saved on your device.`,
     staplesTitle: "Everyday staples",
     staplesBody: "Salt, sugar, oil, and soy sauce never enter the grocery list.",
     equipmentTitle: "Kitchen equipment",
@@ -598,7 +605,7 @@ export const en: Copy = {
     aboutBody: (date: string) =>
       `Demo capstone project. Ingredient detection is simulated, and prices are dated ${date}.`,
     aboutFine: (recipes: number, ingredients: number) =>
-      `Includes ${recipes} sample recipes and ${ingredients} ingredients. Your photos are safe and never stored on a server.`,
+      `Includes ${plural(recipes, "sample recipe", "sample recipes")} and ${plural(ingredients, "ingredient", "ingredients")}. Your photos are safe and never stored on a server.`,
     confirmDelete: "Delete all data on this device?",
     sectionData: "Data & Privacy",
     sectionApp: "App",
@@ -648,8 +655,8 @@ export const en: Copy = {
     cardFooter: "Estimated market prices",
     cardHandle: "pantrified.app",
     emptyItems: "Great, you already have everything!",
-    haveNote: (n: number) => `${n} ingredients already in the fridge.`,
-    more: (n: number) => `+${n} more ingredients`,
+    haveNote: (n: number) => `${plural(n, "ingredient", "ingredients")} already in the fridge.`,
+    more: (n: number) => `+${n} more ${n === 1 ? "ingredient" : "ingredients"}`,
     themeLight: "Light Mode",
     themeDark: "Dark Mode",
     themeLabel: "Preview style",
@@ -668,7 +675,7 @@ export const en: Copy = {
   exportText: {
     listTitle: "Pantrified Grocery List",
     line: (name: string, qty: string, pack: string, cost: string) => `- ${name} ${qty} (${pack}) ${cost}`,
-    pack: (n: number) => `${n} packs`,
+    pack: (n: number) => plural(n, "pack", "packs"),
     singlePack: "1 pack",
     total: (cost: string) => `Total ${cost}`,
     pricePer: (date: string) => `Prices as of ${date}`,
@@ -710,7 +717,7 @@ export const en: Copy = {
     sessionTitle: "Active session",
     sessionEmpty: "No ingredients yet",
     sessionEmptyHint: "Start with a fridge photo or a ready-made sample.",
-    sessionItems: (n: number) => `${n} ingredients`,
+    sessionItems: (n: number) => plural(n, "ingredient", "ingredients"),
     sessionBudget: "Budget",
     sessionResume: "Open session",
     priceDate: "Prices",

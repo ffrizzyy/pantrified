@@ -55,7 +55,9 @@ export interface DetectionResult {
   items: DetectedItem[];
   ignored: number;
   source: "sample" | "upload";
+  /** Uploads show the file name; samples resolve their label from the active copy. */
   label: string;
+  sampleId?: string;
 }
 
 export interface GroceryItem {

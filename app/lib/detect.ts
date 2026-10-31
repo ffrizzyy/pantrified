@@ -39,7 +39,7 @@ export function detectUpload(file: File): DetectionResult {
   };
 }
 
-export function detectSample(sampleId: string, label: string): DetectionResult {
+export function detectSample(sampleId: string): DetectionResult {
   const sample = SAMPLES.find((s) => s.id === sampleId) ?? SAMPLES[0];
   const items: DetectedItem[] = sample.items.map((item) => ({
     id: item.id,
@@ -51,7 +51,8 @@ export function detectSample(sampleId: string, label: string): DetectionResult {
     items,
     ignored: items.filter((item) => item.confidence < 0.3).length,
     source: "sample",
-    label,
+    label: "",
+    sampleId: sample.id,
   };
 }
 

@@ -36,16 +36,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fffff0" },
-    { media: "(prefers-color-scheme: dark)", color: "#15180b" },
-  ],
+  // Light is the product default; `UiProvider` swaps this meta when dark is chosen.
+  themeColor: "#fffff0",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
 };
 
-const themeBoot = `(function(){try{var d=document.documentElement;var t=localStorage.getItem("pantrified.theme");var dark=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);d.dataset.theme=dark?"dark":"light";d.style.colorScheme=dark?"dark":"light";var l=localStorage.getItem("pantrified.locale");if(l==="en"||l==="id")d.lang=l;}catch(e){}})();`;
+const themeBoot = `(function(){try{var d=document.documentElement;var t=localStorage.getItem("pantrified.theme");var dark=t==="dark";d.dataset.theme=dark?"dark":"light";d.style.colorScheme=dark?"dark":"light";var setMeta=function(){var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dark?"#15180b":"#fffff0";};setMeta();document.addEventListener("DOMContentLoaded",setMeta);var l=localStorage.getItem("pantrified.locale");if(l==="en"||l==="id")d.lang=l;}catch(e){}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

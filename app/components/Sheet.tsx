@@ -103,7 +103,7 @@ export function StartSheet({
               key={sample.id}
               type="button"
               className="start-row"
-              onClick={() => onDetect(detectSample(sample.id, meta.label))}
+              onClick={() => onDetect(detectSample(sample.id))}
             >
               <span className={`start-art start-${sample.id}`} aria-hidden="true">
                 {meta.emoji}
