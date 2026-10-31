@@ -54,7 +54,7 @@ app/
   components/     App shell, DesktopSidebar, ShareCard, Icon, FoodArt, Ring, Sheet, Pwa
   components/screens/  Home, Review, Constraints, Plans, Detail, Grocery, Settings
   components/three/    PantryScene (three.js desktop hero)
-  lib/            copy (every UI string), types, data (50 ingredients, 50 recipes, 50 prices),
+  lib/            copy (every UI string), types, data (150 ingredients, 150 recipes, 150 prices),
                   ingredients (alias search), basePath, detect, plan, format, store, useMedia
   public/         manifest, service worker, icons
   scripts/        make_icons.py, validate-data.ts, shot.mjs, shot-desktop.mjs, check.mjs, responsive.mjs
@@ -68,7 +68,7 @@ app/
 - **fabric.js** draws the share card (`components/ShareCard.tsx`) on a `StaticCanvas` at 1080×1350 and exports a PNG. It is imported dynamically, so it never ships in the first load. Light and dark palettes are defined in the component.
 - **three.js** powers the desktop-only pantry still-life (`components/three/PantryScene.tsx`): plate, food meshes, lights, pointer parallax. It loads via `next/dynamic` with `ssr: false`, only mounts at ≥1024px, pauses when offscreen or hidden, and renders a single frame under `prefers-reduced-motion`.
 - **Desktop UI** starts at `min-width: 1024px`: fixed sidebar with nav, new-plan CTA, and session card; sticky topbar; wide content with two-column screen grids and summary rails. The mobile tab bar and sticky CTAs are hidden there. Both layouts share the same screens and state. Between 1024 and 1359px the plan grid drops to two columns, the home hero stacks, and the forms and settings grids collapse to one column; between 1024 and 1199px the summary rail hides and the grocery actions go two-up with the primary button full width.
-- **Mobile UI** is designed at 390px first: 20px screen gutters, a single deep-green home hero, 3:2 sample cards, 16:9 plan art, a two-row review item with the quantity stepper under the name, and a two-column secondary action row on the grocery screen. Fraunces (`--font-serif`) is reserved for headings, the brand, and recipe titles; Plus Jakarta Sans (`--font-ui`) carries UI, body, and tabular numbers.
+- **Mobile UI** is designed at 390px first: 20px screen gutters, a single olive home hero, 3:2 sample cards, 16:9 plan art, a two-row review item with the quantity stepper under the name, and a two-column secondary action row on the grocery screen. Fraunces (`--font-serif`) is reserved for headings, the brand, and recipe titles; Plus Jakarta Sans (`--font-ui`) carries UI, body, and tabular numbers.
 - **Motion** follows short, ease-out transitions (120–260ms) on transform and opacity only, with `prefers-reduced-motion` guards. Tokens (`--ease-out`, `--ease-spring`, `--dur-fast/base/slow`) are at the top of `globals.css`.
 
 ## Checks
@@ -94,8 +94,7 @@ Run them one at a time: `python -m http.server` is single-threaded, so parallel 
 
 ## Known gaps
 
-- Detector is a stub; the PRD's M3 model work is not started.
-- Recipe set is 50 of the 150 the M2 gate asks for; prices cover the same 50 ingredients.
-- Ingredient coverage is uneven: many classes appear in fewer than the target 8 recipes.
-- Prices are one sample table dated 2026-10-27, not a live feed.
+- Detector is a stub; the PRD's M3 model work is not started. Every detector class now appears in at least 8 recipes.
+- The 100 pantry extras beyond the frozen 50 detector classes are searchable and usable in plans, but the simulated detector never returns them.
+- Prices are one sample table of 150 rows dated 2026-10-27, not a live feed.
 - No accounts, no sync, no push notifications.

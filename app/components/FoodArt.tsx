@@ -1,12 +1,12 @@
 ﻿import { useId } from "react";
 
 const PALETTES: [string, string][] = [
-  ["#1F4D3A", "#3C7A5B"],
-  ["#B45309", "#D98324"],
-  ["#3F6B4A", "#7A9A5E"],
-  ["#8A3B2A", "#C06442"],
-  ["#4A5D3A", "#8A9B52"],
-  ["#6B4F2A", "#B08A4F"],
+  ["#4F6214", "#8AA624"],
+  ["#A86100", "#FEA405"],
+  ["#6E861C", "#A4BE3A"],
+  ["#7C8B58", "#B7C596"],
+  ["#3F500E", "#718813"],
+  ["#7A5A18", "#C08A24"],
 ];
 
 const GLYPHS = [
@@ -87,7 +87,7 @@ export function FoodArt({
       )}
       <g
         fill="none"
-        stroke={plain ? "currentColor" : "#FAF7F0"}
+        stroke={plain ? "currentColor" : "#FFFFF0"}
         strokeWidth={plain ? 2.4 : 3.2}
         strokeLinecap="round"
         strokeLinejoin="round"

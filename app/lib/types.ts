@@ -9,6 +9,8 @@ export interface Ingredient {
   unit: Unit;
   category: Category;
   assumed: boolean;
+  /** Detector classes are core; pantry extras are supporting ingredients. */
+  core?: boolean;
   kcal100: number | null;
   allergens: string[];
 }

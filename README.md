@@ -44,7 +44,7 @@ Pantrified does exactly that, in Indonesian, with Jakarta price data.
 - **Budget as a hard constraint.** The planner scores recipes on pantry fit, cost, calories, diet, cook time, and equipment, then shows the three best options. Pack rounding and missing-only costing keep the total honest.
 - **Human in the loop.** The detector never silently decides. Low-confidence rows get an amber `?`, a "perlu dicek" tag, and a count in the header.
 - **Local-first and offline-ready.** No account, no backend, no upload. State lives in `localStorage`; the service worker keeps the shell usable offline.
-- **Designed for Indonesian kitchens.** Indonesian copy, rupiah formatting, local dishes and ingredients, and a warm kitchen-ledger visual language: cream paper, deep green, turmeric, Fraunces headings, Plus Jakarta Sans UI.
+- **Designed for Indonesian kitchens.** Indonesian copy, rupiah formatting, local dishes and ingredients, and a fresh market visual language: cream paper, olive, sage, and orange, Fraunces headings, Plus Jakarta Sans UI.
 - **Two real layouts.** A 390px-first mobile flow with a tab bar and sticky CTAs, and a desktop shell from 1024px with a sidebar, rails, a three.js pantry still-life, and a two- or three-column plan grid.
 - **Finishing touches that ship.** WhatsApp text export, CSV download, a 1080×1350 fabric.js share card, analytics consent gate, data export, and delete-everything.
 
@@ -52,9 +52,9 @@ Pantrified does exactly that, in Indonesian, with Jakarta price data.
 
 The app ships with its own Indonesian food data, not a scraped recipe dump:
 
-- **50 ingredient classes** with Indonesian names, search aliases (`tempeh`, `chayote`, `scallion`), categories, allergens, and kcal per 100 g.
-- **50 recipes** across vegetables, eggs, tempe, tofu, chicken, fish, beef, rice, noodles, and breakfast, each with servings, cook time, equipment, diet tags, steps, and nutrition.
-- **50 dated Jakarta price rows** with pack sizes, so the grocery list rounds to what a shop actually sells.
+- **150 ingredients**: the 50 frozen detector classes plus 100 pantry extras, each with Indonesian names, search aliases (`tempeh`, `chayote`, `scallion`), categories, allergens, and kcal per 100 g.
+- **150 recipes** across vegetables, eggs, tempe, tofu, chicken, fish, beef, rice, noodles, and breakfast, each with servings, cook time, equipment, diet tags, steps, and nutrition. Every detector class appears in at least 8 recipes.
+- **150 dated Jakarta price rows** with pack sizes, so the grocery list rounds to what a shop actually sells.
 - **A validator** that runs before every production build: unique IDs and titles, valid units and equipment, real quantities, known ingredients, price math, dated prices, and ingredient coverage.
 
 ```bash
@@ -143,7 +143,8 @@ Pantrified/
 This is a working portfolio MVP, not a launched product.
 
 - **Ingredient detection is simulated.** `lib/detect.ts` hashes the uploaded file and replays a seeded fridge scene. The image never leaves the device. The interface already consumes a `DetectionResult`, so a real model can replace it without touching the rest of the app.
-- **The recipe set is 50 of the 150 planned**, and prices are a single sample table of 50 rows dated 2026-10-27, not a live feed.
+- **The recipe set is complete for M2:** 150 recipes and 150 dated price rows. Prices are a single sample table dated 2026-10-27, not a live feed.
+- **Only the 50 detector classes can come from a photo.** The other 100 pantry ingredients are searchable and usable in plans, but the simulated detector never returns them.
 - **No accounts, sync, or push notifications.** Data is per device and can be exported or deleted from Settings.
 - **Mobile Safari and Chrome are the targets.** The 3D hero is decorative and desktop-only; the app is fully usable without it.
 

@@ -4,13 +4,13 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useReducedMotion } from "@/lib/useMedia";
 
-const CREAM = 0xfaf7f0;
-const CREAM_DEEP = 0xe9dfc9;
-const GREEN = 0x1f4d3a;
-const LEAF = 0x3c7a5b;
-const AMBER = 0xb45309;
-const TOMATO = 0xc2410c;
-const TAN = 0xd9b382;
+const CREAM = 0xfffff0;
+const CREAM_DEEP = 0xdbe4c9;
+const GREEN = 0x556b14;
+const LEAF = 0x8aa624;
+const AMBER = 0xfea405;
+const TOMATO = 0xc06a2e;
+const TAN = 0xe0c58f;
 
 type Food = {
   mesh: THREE.Mesh;
@@ -57,13 +57,13 @@ export default function PantryScene({ className }: { className?: string }) {
     scene.add(world);
 
     // ------------------------------------------------------------- lighting
-    scene.add(new THREE.HemisphereLight(0xfff6e6, 0x2b3a2f, 1.5));
+    scene.add(new THREE.HemisphereLight(0xfff8e1, 0x3f4a24, 1.5));
 
     const key = new THREE.DirectionalLight(0xfff3dd, 2.4);
     key.position.set(3.5, 6, 4);
     scene.add(key);
 
-    const fill = new THREE.DirectionalLight(0xbfd8c6, 0.7);
+    const fill = new THREE.DirectionalLight(0xdbe4c9, 0.7);
     fill.position.set(-4, 2.5, -2);
     scene.add(fill);
 
@@ -99,8 +99,8 @@ export default function PantryScene({ className }: { className?: string }) {
     const ctx = shadowCanvas.getContext("2d");
     if (ctx) {
       const gradient = ctx.createRadialGradient(128, 128, 10, 128, 128, 126);
-      gradient.addColorStop(0, "rgba(20, 30, 24, 0.42)");
-      gradient.addColorStop(1, "rgba(20, 30, 24, 0)");
+      gradient.addColorStop(0, "rgba(32, 36, 15, 0.42)");
+      gradient.addColorStop(1, "rgba(32, 36, 15, 0)");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 256, 256);
     }

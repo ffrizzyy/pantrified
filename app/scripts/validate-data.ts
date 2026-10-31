@@ -6,7 +6,8 @@ const CATEGORIES = new Set(["protein", "sayur", "bumbu", "buah", "susu", "pokok"
 const DIETS = new Set(["vegetarian", "vegan", "halal"]);
 const ALLERGENS = new Set(["telur", "susu", "ikan", "udang", "kacang", "kedelai", "gluten"]);
 const RECIPE_TARGET = 150;
-const INGREDIENT_TARGET = 50;
+const INGREDIENT_TARGET = 150;
+const PRICE_TARGET = 150;
 const COVERAGE_TARGET = 8;
 
 const errors: string[] = [];
@@ -104,7 +105,7 @@ for (const price of PRICES) {
 for (const ingredient of INGREDIENTS) {
   if (!priceIds.has(ingredient.id)) fail(`${ingredient.id}: missing price row`);
 }
-if (PRICES.length < 150) warn(`only ${PRICES.length} of the 150 price rows planned`);
+if (PRICES.length < PRICE_TARGET) warn(`only ${PRICES.length} of the ${PRICE_TARGET} price rows planned`);
 
 // ---------------------------------------------------------------- recipes
 const recipeIds = new Set<string>();
@@ -185,14 +186,14 @@ if (RECIPES.length < RECIPE_TARGET) {
 
 // ---------------------------------------------------------------- coverage
 const unused: string[] = [];
-const underused: { id: string; count: number }[] = [];
+const short: { id: string; count: number }[] = [];
 for (const ingredient of INGREDIENTS) {
   const count = usage.get(ingredient.id) ?? 0;
   if (count === 0) {
     if (ingredient.assumed) warn(`${ingredient.id}: staple not referenced by a recipe`);
     else unused.push(ingredient.id);
-  } else if (count < COVERAGE_TARGET) {
-    underused.push({ id: ingredient.id, count });
+  } else if (ingredient.core !== false && count < COVERAGE_TARGET) {
+    short.push({ id: ingredient.id, count });
   }
 }
 for (const id of unused) fail(`${id}: ingredient is not used by any recipe`);
@@ -201,13 +202,13 @@ for (const id of unused) fail(`${id}: ingredient is not used by any recipe`);
 console.log(
   `data: ${INGREDIENTS.length} ingredients, ${PRICES.length} prices, ${RECIPES.length} recipes, price date ${PRICE_DATE}`,
 );
-if (underused.length) {
-  const sample = underused
+if (short.length) {
+  const sample = short
     .sort((a, b) => a.count - b.count)
     .slice(0, 12)
     .map((item) => `${item.id} (${item.count})`)
     .join(", ");
-  warn(`${underused.length} ingredients appear in fewer than ${COVERAGE_TARGET} recipes: ${sample}`);
+  warn(`${short.length} core ingredients appear in fewer than ${COVERAGE_TARGET} recipes: ${sample}`);
 }
 
 for (const message of warnings) console.warn(`WARN  ${message}`);

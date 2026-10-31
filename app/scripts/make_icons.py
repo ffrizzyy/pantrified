@@ -1,11 +1,11 @@
 from PIL import Image, ImageDraw
 
 S = 1024
-img = Image.new("RGB", (S, S), "#1f4d3a")
+img = Image.new("RGB", (S, S), "#8aa624")
 d = ImageDraw.Draw(img)
-cream = "#faf7f0"
-pale = "#d8e6dc"
-amber = "#b45309"
+cream = "#fffff0"
+pale = "#dbe4c9"
+amber = "#fea405"
 
 # bowl
 d.pieslice([260, 470, 764, 810], 0, 180, fill=cream)

@@ -1,28 +1,29 @@
 ﻿:root {
-  --bg: #faf7f0;
+  --bg: #fffff0;
   --surface: #ffffff;
-  --ink: #1c1b18;
-  --muted: #5b584f;
-  --primary: #1f4d3a;
-  --primary-hover: #1a4433;
-  --primary-deep: #16382a;
-  --on-primary: #ffffff;
-  --accent: #b45309;
-  --accent-ink: #8a4b12;
+  --ink: #20240f;
+  --muted: #5f6650;
+  --primary: #556b14;
+  --primary-hover: #46580f;
+  --primary-deep: #37450c;
+  --on-primary: #fffff0;
+  --accent: #8a4b00;
+  --accent-bright: #fea405;
+  --accent-ink: #8a4b00;
   --danger: #b3261e;
   --danger-tint: #fbe4e2;
-  --border-strong: #8c8270;
-  --border-subtle: #e3dccb;
-  --surface-tint: #f3ede0;
-  --tint-green: #e3efe7;
-  --tint-amber: #fbebd9;
-  --scrim: rgba(28, 27, 24, 0.78);
+  --border-strong: #7c8564;
+  --border-subtle: #dce3c8;
+  --surface-tint: #f3f6e7;
+  --tint-green: #dbe4c9;
+  --tint-amber: #ffedc9;
+  --scrim: rgba(32, 36, 15, 0.78);
   --radius-card: 22px;
   --radius-inner: 16px;
   --radius-control: 14px;
   --radius-pill: 999px;
-  --shadow-card: 0 2px 8px rgba(28, 27, 24, 0.06);
-  --shadow-lift: 0 18px 40px rgba(28, 27, 24, 0.16);
+  --shadow-card: 0 2px 8px rgba(32, 36, 15, 0.06);
+  --shadow-lift: 0 18px 40px rgba(32, 36, 15, 0.16);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --tab-height: 64px;
   --font-ui: var(--font-sans), "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
@@ -62,7 +63,7 @@ html {
 }
 
 body {
-  background: #e9e3d6;
+  background: #dbe4c9;
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: var(--text-body);
@@ -239,10 +240,10 @@ a {
   border-radius: 26px;
   overflow: hidden;
   margin-bottom: 8px;
-  color: #fff;
+  color: var(--ink);
   background:
-    radial-gradient(120% 95% at 88% -8%, rgba(122, 154, 94, 0.55), transparent 62%),
-    linear-gradient(165deg, #255a43 0%, var(--primary) 48%, var(--primary-deep) 100%);
+    radial-gradient(120% 95% at 88% -8%, rgba(254, 164, 5, 0.42), transparent 62%),
+    linear-gradient(165deg, #a6bf3d 0%, #8aa624 58%, #7b941e 100%);
 }
 
 .hero-art {
@@ -252,15 +253,15 @@ a {
   width: 286px;
   height: 246px;
   display: block;
-  color: #f4efe2;
-  opacity: 0.16;
+  color: var(--primary-deep);
+  opacity: 0.18;
   pointer-events: none;
 }
 
 .hero-copy {
   position: relative;
   padding: 0;
-  color: #fff;
+  color: var(--ink);
 }
 
 .hero-copy .eyebrow {
@@ -270,21 +271,21 @@ a {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #e8bd8a;
+  color: #4a2a00;
 }
 
 .hero-copy h1 {
   font-size: 30px;
   line-height: 1.08;
   letter-spacing: -0.025em;
-  color: #fff;
+  color: var(--ink);
   text-wrap: balance;
 }
 
 .hero-copy p {
   font-size: 14px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(32, 36, 15, 0.86);
   margin-top: 10px;
   max-width: 34ch;
 }
@@ -301,28 +302,28 @@ a {
 }
 
 .hero .btn-primary {
-  background: #fff;
+  background: var(--bg);
   color: var(--primary);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 6px 16px rgba(32, 36, 15, 0.18);
 }
 
 .hero .btn-primary:hover {
-  background: #f3ede0;
+  background: var(--tint-amber);
 }
 
 .hero .btn-ghost {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.24);
-  color: #fff;
+  background: rgba(32, 36, 15, 0.06);
+  border-color: rgba(32, 36, 15, 0.28);
+  color: var(--ink);
 }
 
 .hero .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(32, 36, 15, 0.12);
 }
 
 .hero-fine {
   margin-top: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(32, 36, 15, 0.8);
   font-size: 11.5px;
   line-height: 1.45;
 }
@@ -499,7 +500,7 @@ a {
 .btn-primary {
   background: var(--primary);
   color: var(--on-primary);
-  box-shadow: 0 2px 8px rgba(31, 77, 58, 0.14);
+  box-shadow: 0 2px 8px rgba(85, 107, 20, 0.14);
 }
 
 .btn-primary:hover {
@@ -783,7 +784,7 @@ a {
   width: 48px;
   height: 28px;
   border-radius: 999px;
-  background: #d9d0bc;
+  background: #cfd8b8;
   box-shadow: inset 0 0 0 1px rgba(28, 27, 24, 0.05);
   position: relative;
   flex: none;
@@ -862,7 +863,7 @@ a {
   right: 0;
   bottom: 100%;
   height: 26px;
-  background: linear-gradient(to top, var(--bg), rgba(250, 247, 240, 0));
+  background: linear-gradient(to top, var(--bg), rgba(255, 255, 240, 0));
   pointer-events: none;
 }
 
@@ -1267,7 +1268,7 @@ a {
 
 .need .ing-mark {
   background: var(--tint-amber);
-  color: #8a4b12;
+  color: var(--accent);
 }
 
 .have .ing-mark {
@@ -1633,7 +1634,7 @@ a {
   place-items: center;
   justify-self: center;
   margin-top: -26px;
-  box-shadow: 0 8px 18px rgba(31, 77, 58, 0.32);
+  box-shadow: 0 8px 18px rgba(85, 107, 20, 0.32);
   transition: transform 120ms ease-out;
 }
 
@@ -2150,7 +2151,7 @@ a {
   }
 
   .sidebar-link.on .sidebar-count {
-    background: rgba(31, 77, 58, 0.14);
+    background: rgba(85, 107, 20, 0.14);
   }
 
   .sidebar-bottom {
@@ -2211,7 +2212,7 @@ a {
     gap: 20px;
     height: 64px;
     padding: 0 40px;
-    background: rgba(250, 247, 240, 0.88);
+    background: rgba(255, 255, 240, 0.88);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-subtle);
   }
@@ -2362,7 +2363,7 @@ a {
   .hero .btn-primary {
     background: var(--primary);
     color: var(--on-primary);
-    box-shadow: 0 2px 8px rgba(31, 77, 58, 0.14);
+    box-shadow: 0 2px 8px rgba(85, 107, 20, 0.14);
   }
 
   .hero .btn-primary:hover {
@@ -2388,7 +2389,7 @@ a {
     position: relative;
     display: flex;
     overflow: hidden;
-    background: radial-gradient(120% 110% at 68% 18%, #f8f1df 0%, #e9dfc7 58%, #d9cdb1 100%);
+    background: radial-gradient(120% 110% at 68% 18%, #f6f8ea 0%, #e6ecd3 58%, #d3dcc0 100%);
   }
 
   .hero-visual::before {
