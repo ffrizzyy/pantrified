@@ -1,7 +1,7 @@
 ﻿"use client";
 
-import { copy } from "@/lib/copy";
 import { rp, toolLabel } from "@/lib/format";
+import { useCopy } from "@/lib/ui";
 import type { Profile } from "@/lib/types";
 import { Icon } from "../Icon";
 
@@ -20,6 +20,7 @@ export function Constraints({
   onOpenEquipment: () => void;
   itemCount: number;
 }) {
+  const copy = useCopy();
   const perMeal = profile.budget / Math.max(1, profile.meals);
 
   return (
@@ -144,7 +145,7 @@ export function Constraints({
                 <span>
                   <strong>{copy.constraints.equipmentTitle}</strong>
                   <span className="muted">
-                    {copy.constraints.equipmentSummary(profile.equipment.length, toolLabel(profile.equipment))}
+                    {copy.constraints.equipmentSummary(profile.equipment.length, toolLabel(profile.equipment, copy.common.equipment))}
                   </span>
                 </span>
                 <Icon name="chevron" size={18} />

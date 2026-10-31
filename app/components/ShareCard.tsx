@@ -2,12 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { StaticCanvas } from "fabric";
-import { copy } from "@/lib/copy";
-import { dateLabel, rp } from "@/lib/format";
+import type { Copy } from "@/lib/copy";
+import { dateLabel, qty, rp } from "@/lib/format";
+import { useUi, type Theme } from "@/lib/ui";
 import type { Plan } from "@/lib/types";
 import { Icon } from "./Icon";
-
-type Theme = "light" | "dark";
 
 const W = 1080;
 const H = 1350;
@@ -40,6 +39,8 @@ async function drawCard(
   plan: Plan,
   theme: Theme,
   priceDate: string,
+  copy: Copy,
+  locale: "id" | "en",
 ) {
   const fabric = await import("fabric");
   const palette = PALETTES[theme];
@@ -218,7 +219,7 @@ async function drawCard(
       }),
     );
     canvas.add(
-      new fabric.Text(`${item.missing} ${item.unit}`, {
+      new fabric.Text(qty(item.missing, item.unit, copy.common.units), {
         left: 72,
         top: y + 42,
         fontFamily: sans,
@@ -349,7 +350,7 @@ async function drawCard(
 
   // footer
   canvas.add(
-    new fabric.Text(`${copy.share.cardFooter} · ${dateLabel(priceDate)}`, {
+    new fabric.Text(`${copy.share.cardFooter} · ${dateLabel(priceDate, locale)}`, {
       left: 72,
       top: 1272,
       fontFamily: sans,
@@ -394,8 +395,13 @@ export function ShareCard({
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<StaticCanvas | null>(null);
-  const [theme, setTheme] = useState<Theme>("light");
+  const { copy, locale, theme: appTheme } = useUi();
+  const [theme, setTheme] = useState<Theme>(appTheme);
   const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (open) setTheme(appTheme);
+  }, [open, appTheme]);
 
   useEffect(() => {
     if (!open || !plan) return;
@@ -419,7 +425,7 @@ export function ShareCard({
         // Draw with the fallback family.
       }
       if (cancelled || !canvas) return;
-      await drawCard(canvas, plan, theme, priceDate);
+      await drawCard(canvas, plan, theme, priceDate, copy, locale);
       setReady(true);
     };
 
@@ -432,7 +438,7 @@ export function ShareCard({
       canvas?.dispose();
       fabricRef.current = null;
     };
-  }, [open, plan, theme, priceDate]);
+  }, [open, plan, theme, priceDate, copy, locale]);
 
   useEffect(() => {
     if (!open) return;

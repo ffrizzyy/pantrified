@@ -1,16 +1,11 @@
 "use client";
 
-import { copy } from "@/lib/copy";
 import { pct, rp } from "@/lib/format";
+import { useCopy } from "@/lib/ui";
 import type { Plan, Profile } from "@/lib/types";
 import { FoodArt } from "../FoodArt";
 import { Icon } from "../Icon";
 import { Ring } from "../Ring";
-
-function missingLabel(plan: Plan) {
-  const n = plan.missing.filter((item) => item.missing > 0).length;
-  return n > 0 ? copy.plans.missing(n) : copy.plans.complete;
-}
 
 export function Plans({
   plans,
@@ -25,6 +20,11 @@ export function Plans({
   onBack: () => void;
   onAdjust: () => void;
 }) {
+  const copy = useCopy();
+  const missingLabel = (plan: Plan) => {
+    const n = plan.missing.filter((item) => item.missing > 0).length;
+    return n > 0 ? copy.plans.missing(n) : copy.plans.complete;
+  };
   const perMeal = profile.budget / Math.max(1, profile.meals);
   const cheapest = plans.length ? Math.min(...plans.map((p) => p.cost)) : 0;
   const over = cheapest > perMeal;
@@ -39,7 +39,6 @@ export function Plans({
             {copy.plans.back}
           </button>
           <h1 className="screen-title">{copy.plans.title}</h1>
-          <p className="screen-sub">{copy.plans.sub(rp(perMeal), profile.maxCook)}</p>
 
           {plans.length === 0 ? (
             <div className="card empty">
@@ -125,7 +124,7 @@ export function Plans({
                       </div>
                       {plan.relaxed && (
                         <p className="fine">
-                          <Icon name="info" size={14} /> {plan.relaxed}
+                          <Icon name="info" size={14} /> {copy.plans.relaxed[plan.relaxed]}
                         </p>
                       )}
                     </div>

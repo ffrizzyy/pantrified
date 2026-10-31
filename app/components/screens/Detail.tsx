@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { copy } from "@/lib/copy";
 import { qty as fmtQty, rp } from "@/lib/format";
+import { useCopy } from "@/lib/ui";
 import type { Plan } from "@/lib/types";
 import { FoodArt } from "../FoodArt";
 import { Icon } from "../Icon";
@@ -16,6 +16,7 @@ export function Detail({
   onBack: () => void;
   onList: () => void;
 }) {
+  const copy = useCopy();
   const [tab, setTab] = useState<"bahan" | "langkah">("bahan");
   const { recipe } = plan;
   const buyCount = plan.missing.filter((m) => m.cost > 0).length;
@@ -82,7 +83,7 @@ export function Detail({
                         <Icon name={item.cost > 0 ? "plus" : "check"} size={14} />
                       </span>
                       <span className="ing-name">{item.name}</span>
-                      <span className="ing-qty">{fmtQty(item.qty, item.unit)}</span>
+                      <span className="ing-qty">{fmtQty(item.qty, item.unit, copy.common.units)}</span>
                       <span className="ing-state muted small">
                         {item.cost > 0 ? copy.review.buy : copy.review.have}
                       </span>

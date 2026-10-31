@@ -36,15 +36,24 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fffff0",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fffff0" },
+    { media: "(prefers-color-scheme: dark)", color: "#15180b" },
+  ],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
 };
 
+const themeBoot = `(function(){try{var d=document.documentElement;var t=localStorage.getItem("pantrified.theme");var dark=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);d.dataset.theme=dark?"dark":"light";d.style.colorScheme=dark?"dark":"light";var l=localStorage.getItem("pantrified.locale");if(l==="en"||l==="id")d.lang=l;}catch(e){}})();`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className={`${sans.variable} ${display.variable}`}>
+    <html lang="id" className={`${sans.variable} ${display.variable}`} suppressHydrationWarning>
+      <head>
+        <meta name="color-scheme" content="light dark" />
+        <script dangerouslySetInnerHTML={{ __html: themeBoot }} />
+      </head>
       <body>
         <Pwa />
         {children}

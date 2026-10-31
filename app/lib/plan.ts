@@ -1,6 +1,6 @@
-import { copy } from "./copy";
+import type { Copy } from "./copy";
 import { RECIPES, ingredientById, priceById } from "./data";
-import { rp } from "./format";
+import { qty, rp } from "./format";
 import type { DetectedItem, GroceryItem, Plan, Profile, Recipe } from "./types";
 
 export function availableMap(items: DetectedItem[]): Map<string, number> {
@@ -48,7 +48,7 @@ function equipmentOk(recipe: Recipe, profile: Profile): boolean {
   return recipe.equipment.every((tool) => profile.equipment.includes(tool));
 }
 
-function makePlan(recipe: Recipe, items: DetectedItem[], profile: Profile, relaxed: string | null): Plan {
+function makePlan(recipe: Recipe, items: DetectedItem[], profile: Profile, relaxed: Plan["relaxed"]): Plan {
   const missing = groceryFor(recipe, items, profile);
   const cost = missing.reduce((sum, item) => sum + item.cost, 0);
   const countable = missing.filter((item) => !(profile.staples && (ingredientById.get(item.ingredientId)?.assumed ?? false)));
@@ -87,19 +87,19 @@ function pick(pool: Plan[], profile: Profile): Plan[] {
 
 export function buildPlans(items: DetectedItem[], profile: Profile): Plan[] {
   const perMeal = profile.budget / Math.max(1, profile.meals);
-  const eligible = (maxCook: number, relaxed: string | null): Plan[] =>
+  const eligible = (maxCook: number, relaxed: Plan["relaxed"]): Plan[] =>
     RECIPES.filter((r) => dietOk(r, profile) && equipmentOk(r, profile) && r.cookMin <= maxCook)
       .map((r) => makePlan(r, items, profile, relaxed));
 
   const strict = eligible(profile.maxCook, null).filter((p) => p.cost <= perMeal);
   if (strict.length >= 3) return pick(strict, profile);
 
-  const longer = eligible(Math.min(profile.maxCook + 10, 90), copy.plans.relaxed.time)
+  const longer = eligible(Math.min(profile.maxCook + 10, 90), "time")
     .filter((p) => p.cost <= perMeal);
   const pool = strict.length >= longer.length ? strict : longer;
   if (pool.length >= 3) return pick(pool, profile);
 
-  const over = eligible(Math.min(profile.maxCook + 10, 90), copy.plans.relaxed.budget)
+  const over = eligible(Math.min(profile.maxCook + 10, 90), "budget")
     .sort((a, b) => a.cost - b.cost);
   const merged = [...pool];
   for (const plan of over) {
@@ -113,12 +113,12 @@ export function groceryTotal(plan: Plan): number {
   return plan.missing.reduce((sum, item) => sum + item.cost, 0);
 }
 
-export function copyText(plan: Plan, priceDate: string): string {
+export function copyText(plan: Plan, priceDate: string, copy: Copy): string {
   const lines = [copy.exportText.listTitle, ""];
   for (const item of plan.missing) {
     if (item.cost === 0) continue;
     const pack = item.packs > 1 ? copy.exportText.pack(item.packs) : copy.exportText.singlePack;
-    lines.push(copy.exportText.line(item.name, `${item.missing} ${item.unit}`, pack, rp(item.cost)));
+    lines.push(copy.exportText.line(item.name, qty(item.missing, item.unit, copy.common.units), pack, rp(item.cost)));
   }
   lines.push(
     "",
@@ -128,10 +128,16 @@ export function copyText(plan: Plan, priceDate: string): string {
   return lines.join("\n");
 }
 
-export function csvText(plan: Plan): string {
+export function csvText(plan: Plan, copy: Copy): string {
   const rows: string[][] = [[...copy.exportText.csvHeader]];
   for (const item of plan.missing) {
-    rows.push([item.name, String(item.missing), item.unit, String(item.packs), String(Math.round(item.cost))]);
+    rows.push([
+      item.name,
+      String(item.missing),
+      copy.common.units[item.unit] ?? item.unit,
+      String(item.packs),
+      String(Math.round(item.cost)),
+    ]);
   }
   return rows.map((row) => row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(",")).join("\n");
 }

@@ -1,5 +1,4 @@
-﻿import { copy } from "./copy";
-import type { Ingredient, Price, Recipe } from "./types";
+﻿import type { Ingredient, Price, Recipe } from "./types";
 
 export const PRICE_DATE = "2026-10-27";
 
@@ -944,11 +943,12 @@ export const RECIPES: Recipe[] = [
 
 export const EQUIPMENT = ["kompor", "wajan", "panci", "kukusan", "rice cooker", "oven", "blender"];
 
-export const SAMPLES: { id: string; label: string; note: string; items: { id: string; qty: number; confidence: number }[] }[] = [
+export const SAMPLES: {
+  id: "sample-a" | "sample-b" | "sample-c";
+  items: { id: string; qty: number; confidence: number }[];
+}[] = [
   {
     id: "sample-a",
-    label: copy.samples["sample-a"].label,
-    note: copy.samples["sample-a"].note,
     items: [
       { id: "ing_telur", qty: 4, confidence: 0.93 },
       { id: "ing_tempe", qty: 200, confidence: 0.88 },
@@ -961,8 +961,6 @@ export const SAMPLES: { id: string; label: string; note: string; items: { id: st
   },
   {
     id: "sample-b",
-    label: copy.samples["sample-b"].label,
-    note: copy.samples["sample-b"].note,
     items: [
       { id: "ing_ayam", qty: 300, confidence: 0.9 },
       { id: "ing_kol", qty: 200, confidence: 0.84 },
@@ -974,8 +972,6 @@ export const SAMPLES: { id: string; label: string; note: string; items: { id: st
   },
   {
     id: "sample-c",
-    label: copy.samples["sample-c"].label,
-    note: copy.samples["sample-c"].note,
     items: [
       { id: "ing_tahu", qty: 300, confidence: 0.91 },
       { id: "ing_buncis", qty: 200, confidence: 0.86 },

@@ -78,7 +78,8 @@ export interface Plan {
   missingCost: number;
   utilization: number;
   missing: GroceryItem[];
-  relaxed: string | null;
+  /** Why the plan was relaxed, kept as a key so it can be translated later. */
+  relaxed: "time" | "budget" | null;
 }
 
 export interface Profile {

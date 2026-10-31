@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PRICE_DATE, ingredientById } from "@/lib/data";
 import { detectSample, detectUpload } from "@/lib/detect";
-import { copy } from "@/lib/copy";
 import { copyText, csvText, buildPlans } from "@/lib/plan";
 import { dateLabel } from "@/lib/format";
 import { DEFAULT_PROFILE, clear as clearStore, event as makeEvent, load, save } from "@/lib/store";
+import { useCopy, useUi } from "@/lib/ui";
 import type { DetectionResult, DetectedItem, FeedbackEvent, Plan, Profile } from "@/lib/types";
 import { AddItemSheet, EquipmentSheet, StartSheet, itemDefaults } from "./Sheet";
 import { DesktopSidebar, type Screen } from "./DesktopSidebar";
@@ -22,24 +22,8 @@ import { Settings } from "./screens/Settings";
 
 type SheetName = "start" | "add" | "equipment" | null;
 
-const TABS: { id: Screen; label: string; icon: IconName }[] = [
-  { id: "home", label: copy.nav.home, icon: "home" },
-  { id: "plans", label: copy.nav.plans, icon: "plan" },
-  { id: "list", label: copy.nav.list, icon: "list" },
-  { id: "settings", label: copy.nav.settings, icon: "user" },
-];
-
-const SECTION_LABEL: Record<Screen, string> = {
-  home: copy.desktop.sectionHome,
-  review: copy.desktop.sectionReview,
-  constraints: copy.desktop.sectionConstraints,
-  plans: copy.desktop.sectionPlans,
-  detail: copy.desktop.sectionDetail,
-  list: copy.desktop.sectionList,
-  settings: copy.desktop.sectionSettings,
-};
-
 export default function App() {
+  const { copy, locale } = useUi();
   const [screen, setScreen] = useState<Screen>("home");
   const [items, setItems] = useState<DetectedItem[]>([]);
   const [excluded, setExcluded] = useState<string[]>([]);
@@ -53,6 +37,23 @@ export default function App() {
   const [sheet, setSheet] = useState<SheetName>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [shareOpen, setShareOpen] = useState(false);
+
+  const TABS: { id: Screen; label: string; icon: IconName }[] = [
+    { id: "home", label: copy.nav.home, icon: "home" },
+    { id: "plans", label: copy.nav.plans, icon: "plan" },
+    { id: "list", label: copy.nav.list, icon: "list" },
+    { id: "settings", label: copy.nav.settings, icon: "user" },
+  ];
+
+  const SECTION_LABEL: Record<Screen, string> = {
+    home: copy.desktop.sectionHome,
+    review: copy.desktop.sectionReview,
+    constraints: copy.desktop.sectionConstraints,
+    plans: copy.desktop.sectionPlans,
+    detail: copy.desktop.sectionDetail,
+    list: copy.desktop.sectionList,
+    settings: copy.desktop.sectionSettings,
+  };
 
   useEffect(() => {
     const stored = load();
@@ -110,6 +111,14 @@ export default function App() {
     [log, startDetection],
   );
 
+  const startSample = useCallback(
+    (id: string) => {
+      const label = copy.samples[id as keyof typeof copy.samples]?.label ?? id;
+      startDetection(detectSample(id, label));
+    },
+    [copy, startDetection],
+  );
+
   const activeItems = useMemo(() => items.filter((item) => !excluded.includes(item.id)), [items, excluded]);
 
   const generate = useCallback(() => {
@@ -154,7 +163,7 @@ export default function App() {
 
   const copyList = async () => {
     if (!selectedPlan) return;
-    const text = copyText(selectedPlan, PRICE_DATE);
+    const text = copyText(selectedPlan, PRICE_DATE, copy);
     try {
       await navigator.clipboard.writeText(text);
       setToast(copy.toasts.copied);
@@ -176,7 +185,7 @@ export default function App() {
 
   const csv = () => {
     if (!selectedPlan) return;
-    download("daftar-belanja-pantrified.csv", csvText(selectedPlan), "text/csv;charset=utf-8");
+    download("daftar-belanja-pantrified.csv", csvText(selectedPlan, copy), "text/csv;charset=utf-8");
     setToast(copy.toasts.csvDone);
     log("grocery_exported", selectedPlan.recipe.id);
   };
@@ -233,7 +242,7 @@ export default function App() {
           </div>
           <div className="topbar-right">
             <span className="topbar-date">
-              {copy.desktop.priceDate} {dateLabel(PRICE_DATE)}
+              {copy.desktop.priceDate} {dateLabel(PRICE_DATE, locale)}
             </span>
             <span className="tag tag-ok">{copy.desktop.demo}</span>
           </div>
@@ -243,7 +252,7 @@ export default function App() {
           {screen === "home" && (
             <Home
               onStart={() => setSheet("start")}
-              onSample={(id) => startDetection(detectSample(id))}
+              onSample={startSample}
               hasSession={items.length > 0}
               onResume={resume}
               budget={profile.budget}
@@ -393,6 +402,7 @@ function TabButton({
 }
 
 function EmptyState({ onStart }: { onStart: () => void }) {
+  const copy = useCopy();
   return (
     <div className="screen-inner">
       <div className="card empty">

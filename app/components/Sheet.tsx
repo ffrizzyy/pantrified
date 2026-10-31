@@ -2,11 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { EQUIPMENT, SAMPLES, ingredientById } from "@/lib/data";
-import { copy } from "@/lib/copy";
 import { detectSample } from "@/lib/detect";
 import { searchIngredients } from "@/lib/ingredients";
+import { useCopy } from "@/lib/ui";
 import type { DetectionResult } from "@/lib/types";
-import { FoodArt } from "./FoodArt";
 import { Icon } from "./Icon";
 
 export function Sheet({
@@ -20,6 +19,7 @@ export function Sheet({
   onClose: () => void;
   children: React.ReactNode;
 }) {
+  const copy = useCopy();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -73,6 +73,7 @@ export function StartSheet({
   onDetect: (result: DetectionResult) => void;
   onUpload: (file: File) => void;
 }) {
+  const copy = useCopy();
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <Sheet open={open} title={copy.sheets.startTitle} onClose={onClose}>
@@ -95,23 +96,26 @@ export function StartSheet({
       </button>
       <p className="sheet-label">{copy.sheets.samplesLabel}</p>
       <div className="start-list">
-        {SAMPLES.map((sample, index) => (
-          <button
-            key={sample.id}
-            type="button"
-            className="start-row"
-            onClick={() => onDetect(detectSample(sample.id))}
-          >
-            <span className="start-art">
-              <FoodArt art={index + 1} />
-            </span>
-            <span className="start-text">
-              <strong>{sample.label}</strong>
-              <span>{sample.note}</span>
-            </span>
-            <Icon name="chevron" size={18} />
-          </button>
-        ))}
+        {SAMPLES.map((sample) => {
+          const meta = copy.samples[sample.id];
+          return (
+            <button
+              key={sample.id}
+              type="button"
+              className="start-row"
+              onClick={() => onDetect(detectSample(sample.id, meta.label))}
+            >
+              <span className={`start-art start-${sample.id}`} aria-hidden="true">
+                {meta.emoji}
+              </span>
+              <span className="start-text">
+                <strong>{meta.label}</strong>
+                <span>{meta.note}</span>
+              </span>
+              <Icon name="chevron" size={18} />
+            </button>
+          );
+        })}
       </div>
       <p className="fine">{copy.sheets.demoNote}</p>
     </Sheet>
@@ -129,6 +133,7 @@ export function AddItemSheet({
   onAdd: (id: string) => void;
   existing: string[];
 }) {
+  const copy = useCopy();
   const [query, setQuery] = useState("");
   const results = useMemo(() => {
     return searchIngredients(query, 12, existing);
@@ -187,6 +192,7 @@ export function EquipmentSheet({
   value: string[];
   onChange: (next: string[]) => void;
 }) {
+  const copy = useCopy();
   return (
     <Sheet open={open} title={copy.sheets.equipmentTitle} onClose={onClose}>
       <p className="sheet-lead">{copy.sheets.equipmentLead}</p>
@@ -202,7 +208,7 @@ export function EquipmentSheet({
               onClick={() => onChange(on ? value.filter((t) => t !== tool) : [...value, tool])}
             >
               {on && <Icon name="check" size={14} />}
-              {tool}
+              {copy.common.equipment[tool] ?? tool}
             </button>
           );
         })}

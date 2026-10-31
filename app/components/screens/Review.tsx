@@ -1,8 +1,8 @@
 "use client";
 
 import { ingredientById } from "@/lib/data";
-import { copy } from "@/lib/copy";
 import { qty as fmtQty } from "@/lib/format";
+import { useCopy } from "@/lib/ui";
 import { reviewState } from "@/lib/detect";
 import type { DetectedItem } from "@/lib/types";
 import { Icon } from "../Icon";
@@ -30,6 +30,7 @@ export function Review({
   onContinue: () => void;
   onBack: () => void;
 }) {
+  const copy = useCopy();
   const active = items.filter((item) => !excluded.includes(item.id));
   const checkCount = active.filter((item) => reviewState(item.confidence) === "check").length;
   const categories = active.reduce<Record<string, number>>((acc, item) => {
@@ -99,7 +100,7 @@ export function Review({
                       <button type="button" onClick={() => onQty(item.id, -1)} aria-label={copy.common.decrease}>
                         −
                       </button>
-                      <span>{fmtQty(item.qty, item.unit)}</span>
+                      <span>{fmtQty(item.qty, item.unit, copy.common.units)}</span>
                       <button type="button" onClick={() => onQty(item.id, 1)} aria-label={copy.common.increase}>
                         +
                       </button>

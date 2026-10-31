@@ -8,10 +8,11 @@
  * file never has to know about number formatting.
  */
 
-export const copy = {
+import type { Unit } from "./types";
+
+const id = {
   brand: {
     name: "Pantrified",
-    tagline: "Foto kulkas, dapet 3 ide menu, langsung jadi daftar belanja.",
     version: "Pantrified 0.1",
   },
 
@@ -41,6 +42,25 @@ export const copy = {
     minutesShort: (n: number) => `${n} mnt`,
     kcal: (n: number) => `${n} kkal`,
     rupiahPrefix: "Rp",
+    units: {
+      g: "g",
+      ml: "ml",
+      butir: "butir",
+      ikat: "ikat",
+      siung: "siung",
+      lembar: "lembar",
+      batang: "batang",
+      buah: "buah",
+    } as Record<Unit, string>,
+    equipment: {
+      kompor: "Kompor",
+      wajan: "Wajan",
+      panci: "Panci",
+      kukusan: "Kukusan",
+      "rice cooker": "Rice cooker",
+      oven: "Oven",
+      blender: "Blender",
+    } as Record<string, string>,
   },
 
   home: {
@@ -56,15 +76,15 @@ export const copy = {
     howTitle: "Gampang banget, begini caranya:",
     how: [
       {
-        title: "1. Foto isi kulkas",
+        title: "Foto isi kulkas",
         body: "Cukup satu foto saja. Kalau ada yang salah deteksi, tinggal hapus.",
       },
       {
-        title: "2. Tentukan budget & waktu",
+        title: "Tentukan budget & waktu",
         body: "Atur budget harian, target kalori, sama batas waktu masaknya.",
       },
       {
-        title: "3. Cukup beli kurangnya",
+        title: "Cukup beli kurangnya",
         body: "Daftar belanja otomatis dibuat hanya untuk bahan yang belum ada.",
       },
     ],
@@ -197,7 +217,7 @@ export const copy = {
 
   settings: {
     title: "Pengaturan",
-    sub: "Kelola data, izin aplikasi, dan alat masakmu.",
+    sub: "Kelola data, tampilan, bahasa, dan alat masakmu.",
     analyticsTitle: "Bantu kembangkan aplikasi (Analitik)",
     analyticsBody: "Nonaktif secara default. Tidak ada foto atau data pribadi yang dikirim.",
     events: (n: number) => `${n} aktivitas tersimpan di perangkatmu.`,
@@ -216,6 +236,14 @@ export const copy = {
     sectionData: "Data & Privasi",
     sectionApp: "Aplikasi",
     sectionAbout: "Tentang",
+    appearanceTitle: "Tampilan",
+    appearanceBody: "Pilih mode terang atau gelap. Pilihanmu tersimpan di perangkat ini.",
+    themeLight: "Terang",
+    themeDark: "Gelap",
+    languageTitle: "Bahasa",
+    languageBody: "Ganti bahasa antarmuka. Nama resep dan bahan tetap dalam bahasa Indonesia.",
+    languageId: "Bahasa Indonesia",
+    languageEn: "English",
   },
 
   sheets: {
@@ -294,6 +322,8 @@ export const copy = {
     scene: "Ilustrasi 3D bahan makanan di atas piring",
     shareCanvas: "Pratinjau kartu belanja",
     recipeArt: (name: string) => `Ilustrasi ${name}`,
+    appearance: "Pilihan tampilan",
+    language: "Pilihan bahasa",
   },
 
   empty: {
@@ -312,6 +342,7 @@ export const copy = {
     sectionSettings: "Pengaturan",
     sessionTitle: "Sesi aktif",
     sessionEmpty: "Belum ada bahan",
+    sessionEmptyHint: "Mulai dari foto kulkas atau contoh siap pakai.",
     sessionItems: (n: number) => `${n} bahan`,
     sessionBudget: "Budget",
     sessionResume: "Buka sesi",
@@ -328,16 +359,389 @@ export const copy = {
     "sample-a": {
       label: "Kulkas Anak Kos",
       note: "Sisa belanja mingguan, masih ada stok telur dan sayuran segar.",
+      emoji: "🍳",
     },
     "sample-b": {
       label: "Kulkas Tanggal Tua",
       note: "Isi kulkas minimalis, tapi banyak bahan pokok andalan.",
+      emoji: "🍚",
     },
     "sample-c": {
       label: "Kulkas Habis Masak",
       note: "Penuh sisa sayuran segar dan aneka protein.",
+      emoji: "🥗",
     },
   },
-} as const;
+};
 
-export type Copy = typeof copy;
+export type Copy = typeof id;
+export type Locale = "id" | "en";
+
+export const en: Copy = {
+  brand: {
+    name: "Pantrified",
+    version: "Pantrified 0.1",
+  },
+
+  nav: {
+    label: "Main navigation",
+    home: "Home",
+    plans: "Menu",
+    list: "Grocery",
+    listLong: "Grocery list",
+    settings: "Account",
+    settingsLong: "Settings",
+    newPlan: "New menu",
+  },
+
+  common: {
+    back: "Back",
+    close: "Close",
+    done: "Done",
+    choose: "Choose",
+    add: "Add",
+    remove: "Remove",
+    decrease: "Decrease",
+    increase: "Increase",
+    perPortion: "per serving",
+    portions: (n: number) => `${n} servings`,
+    minutes: (n: number) => `${n} minutes`,
+    minutesShort: (n: number) => `${n} min`,
+    kcal: (n: number) => `${n} kcal`,
+    rupiahPrefix: "Rp",
+    units: {
+      g: "g",
+      ml: "ml",
+      butir: "pcs",
+      ikat: "bunch",
+      siung: "clove",
+      lembar: "sheet",
+      batang: "stalk",
+      buah: "pc",
+    } as Record<Unit, string>,
+    equipment: {
+      kompor: "Stove",
+      wajan: "Wok",
+      panci: "Pot",
+      kukusan: "Steamer",
+      "rice cooker": "Rice cooker",
+      oven: "Oven",
+      blender: "Blender",
+    } as Record<string, string>,
+  },
+
+  home: {
+    eyebrow: "Good food from what you already have",
+    heroTitle: "Turn your fridge into 3 meals that fit your budget.",
+    heroBody: "Snap your fridge, check the ingredients, and set a budget. We'll handle the rest.",
+    cta: "Start with a Fridge Photo",
+    heroArtLabel: "Illustration of a meal made from fridge ingredients",
+    resumeTitle: "Continue last session",
+    resumeBody: "Your ingredients and last menu plan are still saved.",
+    samplesTitle: "Or try one of these sample fridges",
+    samplesNote: "No photo needed",
+    howTitle: "Easy. Here's how it works:",
+    how: [
+      {
+        title: "Photograph your fridge",
+        body: "One photo is enough. Remove anything that was detected wrong.",
+      },
+      {
+        title: "Set budget & time",
+        body: "Choose a daily budget, a calorie target, and a cooking time limit.",
+      },
+      {
+        title: "Buy only what's missing",
+        body: "The grocery list is built only from ingredients you don't have yet.",
+      },
+    ],
+    budgetNote: (budget: string) => `Starting budget ${budget} per day. You can change it in the next step.`,
+    stats: (recipes: number, ingredients: number) => [
+      { value: "3", label: "menu picks per session" },
+      { value: String(recipes), label: "go-to recipes" },
+      { value: String(ingredients), label: "ingredient choices" },
+    ],
+    sceneCaption: "3D illustration of the pantry",
+  },
+
+  review: {
+    back: "Back",
+    title: "Let's check the ingredients",
+    photoLabel: "photo",
+    sub: (count: number, label: string) =>
+      `${count} ingredients ready from ${label}. Remove anything wrong, or add what's missing.`,
+    subLead: (count: number) => `${count} ingredients ready from `,
+    subCheck: (count: number) => `${count} need a check`,
+    subTail: ". Remove anything wrong, or add what's missing.",
+    ignored: (n: number) => `${n} low-confidence ingredients hidden.`,
+    empty: "No ingredients yet. Add them one by one.",
+    add: "Add ingredient",
+    continue: "Next: Set Budget",
+    checkTag: "Check",
+    confidence: (pct: number) => `${pct}% confident`,
+    buy: "buy",
+    have: "have",
+    railTitle: "Ingredient summary",
+    railTotal: "in use",
+    railChecked: "to check",
+    railCategories: "Categories",
+    railHint: "You can adjust every quantity before building a menu.",
+  },
+
+  constraints: {
+    back: "Back",
+    title: "Set budget & preferences",
+    sub: (n: number) => `${n} ingredients ready to cook. Set the limits and we'll build the best menu.`,
+    budgetLabel: "Food budget per day",
+    budgetNote: (meals: number, perMeal: string) =>
+      `For ${meals} meals, about ${perMeal} per serving.`,
+    mealsLabel: "How many meals?",
+    meals: (n: number) => `${n} meals`,
+    kcalLabel: "Calorie target per serving",
+    kcalOption: (n: number) => `${n} kcal`,
+    dietLabel: "Diet preference",
+    diets: {
+      none: "Anything goes",
+      vegetarian: "Vegetarian",
+      vegan: "Vegan",
+    },
+    cookLabel: "Cooking time limit",
+    cookOption: (n: number) => `Max ${n} min`,
+    equipmentTitle: "Available equipment",
+    equipmentSummary: (count: number, list: string) => `${count} selected: ${list}`,
+    staplesTitle: "Everyday staples",
+    staplesBody: "Salt, sugar, oil, and soy sauce are assumed to be in your kitchen.",
+    submit: "Build 3 Menu Picks",
+    railTitle: "Summary",
+    railBudget: "Budget / day",
+    railPerMeal: "Per serving",
+    railMeals: "Meals",
+    railCook: "Cook time",
+    railEquipment: "Equipment",
+    railNote: "Menus are built from the ingredients you checked, not the whole fridge.",
+  },
+
+  plans: {
+    back: "Change budget",
+    title: "Menu picks for you",
+    sub: (perMeal: string, cook: number) =>
+      `Built from your ingredients, a ${perMeal} budget per serving, and a ${cook}-minute cooking limit.`,
+    cheapest: "Best value",
+    ofBudget: (perMeal: string) => `of ${perMeal} per serving`,
+    tagOver: "A little over budget",
+    tagOk: "Within budget",
+    tagStock: "Fridge stock covers it",
+    missing: (n: number) => `${n} ingredients short`,
+    complete: "All ingredients ready",
+    have: (pct: string) => `${pct} of ingredients on hand`,
+    shopping: "Shop first",
+    noShopping: "No shopping",
+    emptyTitle: "Nothing fits yet",
+    emptyBody: "Try a little more cooking time, add kitchen equipment, or raise the budget.",
+    emptyCta: "Change Limits",
+    adjust: "Adjust limits & rebuild",
+    relaxed: {
+      time: "Cook time extended by 10 minutes",
+      budget: "Over the per-serving budget",
+    },
+  },
+
+  detail: {
+    back: "Back",
+    tabsLabel: "Recipe details",
+    tabIngredients: "Ingredients",
+    tabSteps: "How to cook",
+    priceNote: (servings: number) =>
+      `Estimated price for ${servings} servings. Everyday staples are assumed to be available.`,
+    cta: (cost: string | null) => (cost ? `Make grocery list · ${cost}` : "View grocery list"),
+    meta: (servings: number, minutes: number, kcal: number) =>
+      `${servings} servings · ${minutes} min · ${kcal} kcal`,
+  },
+
+  grocery: {
+    back: "Back to recipe",
+    title: "Grocery list",
+    sub: (recipe: string, servings: number) => `${recipe} · ${servings} servings`,
+    total: "Estimated grocery total",
+    totalMeta: (count: number, date: string) => `${count} ingredients · prices as of ${date}`,
+    allHave: "Nice, everything is already in your fridge. Time to cook!",
+    haveTitle: "Already in the fridge",
+    haveCount: (n: number) => `${n} ingredients`,
+    packs: (n: number) => `${n} packs`,
+    leftover: (qty: string) => `extra ${qty}`,
+    noPrice: "No price yet",
+    copy: "Copy text for WhatsApp",
+    csv: "Download CSV",
+    share: "Make a grocery card",
+    disclaimer:
+      "Prices above are market estimates and may differ at your nearest shop. Use them as a guide only.",
+    railTitle: "Grocery summary",
+    railItems: "To buy",
+    railHave: "Already have",
+    railDate: "Price update",
+    railNote: "This grocery card is made on your device and stays private.",
+  },
+
+  settings: {
+    title: "Settings",
+    sub: "Manage your data, appearance, language, and kitchen equipment.",
+    analyticsTitle: "Help improve the app (Analytics)",
+    analyticsBody: "Off by default. No photos or personal data are uploaded.",
+    events: (n: number) => `${n} events saved on your device.`,
+    staplesTitle: "Everyday staples",
+    staplesBody: "Salt, sugar, oil, and soy sauce never enter the grocery list.",
+    equipmentTitle: "Kitchen equipment",
+    exportTitle: "Download my data",
+    exportBody: "Get a JSON file with your profile, ingredients, and activity history.",
+    deleteTitle: "Delete all data",
+    deleteBody: "Clear this session, saved ingredients, and history on this device.",
+    aboutBody: (date: string) =>
+      `Demo capstone project. Ingredient detection is simulated, and prices are dated ${date}.`,
+    aboutFine: (recipes: number, ingredients: number) =>
+      `Includes ${recipes} sample recipes and ${ingredients} ingredients. Your photos are safe and never stored on a server.`,
+    confirmDelete: "Delete all data on this device?",
+    sectionData: "Data & Privacy",
+    sectionApp: "App",
+    sectionAbout: "About",
+    appearanceTitle: "Appearance",
+    appearanceBody: "Choose light or dark mode. Your choice is saved on this device.",
+    themeLight: "Light",
+    themeDark: "Dark",
+    languageTitle: "Language",
+    languageBody: "Switch the interface language. Recipe and ingredient names stay in Indonesian.",
+    languageId: "Bahasa Indonesia",
+    languageEn: "English",
+  },
+
+  sheets: {
+    startTitle: "What are we cooking today?",
+    startLead: "Photograph your fridge now, or pick a ready-made sample fridge below.",
+    upload: "Take or choose a fridge photo",
+    samplesLabel: "Sample fridges",
+    demoNote: "Demo mode: detection results are simulated instantly.",
+    addTitle: "Add ingredient",
+    searchLabel: "Search ingredients",
+    searchPlaceholder: "Try: tempeh, chicken breast, spinach...",
+    noResults: "No ingredient matches that search.",
+    equipmentTitle: "Choose kitchen equipment",
+    equipmentLead: "Check what you have in your kitchen. Recipes that need other tools are hidden.",
+  },
+
+  toasts: {
+    copied: "Grocery list copied!",
+    copyFailed: "Could not copy automatically. Try downloading the CSV instead.",
+    csvDone: "CSV file downloaded.",
+    exportDone: "Your data was downloaded.",
+    cleared: "All data cleared.",
+    cardDone: "Grocery card downloaded.",
+  },
+
+  share: {
+    title: "Grocery card",
+    lead: "Ready to share on WhatsApp or your social story.",
+    download: "Download as PNG",
+    generating: "Preparing your card...",
+    cardTitle: "Grocery list",
+    cardTotal: "Estimated Total",
+    cardItems: "To buy",
+    cardHave: "On hand",
+    cardFooter: "Estimated market prices",
+    cardHandle: "pantrified.app",
+    emptyItems: "Great, you already have everything!",
+    haveNote: (n: number) => `${n} ingredients already in the fridge.`,
+    more: (n: number) => `+${n} more ingredients`,
+    themeLight: "Light Mode",
+    themeDark: "Dark Mode",
+    themeLabel: "Preview style",
+  },
+
+  categories: {
+    protein: "Protein",
+    sayur: "Vegetables & Fruit",
+    bumbu: "Spices & Herbs",
+    buah: "Fruit",
+    susu: "Dairy & Processed",
+    pokok: "Staples",
+    kemasan: "Packaged Food",
+  } as Record<string, string>,
+
+  exportText: {
+    listTitle: "Pantrified Grocery List",
+    line: (name: string, qty: string, pack: string, cost: string) => `- ${name} ${qty} (${pack}) ${cost}`,
+    pack: (n: number) => `${n} packs`,
+    singlePack: "1 pack",
+    total: (cost: string) => `Total ${cost}`,
+    pricePer: (date: string) => `Prices as of ${date}`,
+    csvHeader: ["ingredient", "quantity", "unit", "packs", "price"],
+  },
+
+  a11y: {
+    itemToggle: (name: string, used: boolean) => `${name} ${used ? "in use" : "not in use"}`,
+    qty: (name: string) => `Quantity of ${name}`,
+    remove: (name: string) => `Remove ${name}`,
+    budget: "Food budget per day",
+    meals: "Number of meals",
+    diet: "Diet",
+    staples: "Everyday staples available",
+    analytics: "Allow analytics",
+    choosePlan: (name: string) => `Choose ${name}`,
+    cheapest: (cost: string, budget: string) => `Cheapest pick ${cost} out of a ${budget} budget`,
+    scene: "3D illustration of ingredients on a plate",
+    shareCanvas: "Grocery card preview",
+    recipeArt: (name: string) => `Illustration of ${name}`,
+    appearance: "Appearance options",
+    language: "Language options",
+  },
+
+  empty: {
+    title: "No menu picks yet",
+    body: "Start by photographing your fridge or choose one of the samples.",
+    cta: "Start Now",
+  },
+
+  desktop: {
+    sectionHome: "Home",
+    sectionReview: "Check ingredients",
+    sectionConstraints: "Set budget",
+    sectionPlans: "Menu picks",
+    sectionDetail: "Recipe details",
+    sectionList: "Grocery list",
+    sectionSettings: "Settings",
+    sessionTitle: "Active session",
+    sessionEmpty: "No ingredients yet",
+    sessionEmptyHint: "Start with a fridge photo or a ready-made sample.",
+    sessionItems: (n: number) => `${n} ingredients`,
+    sessionBudget: "Budget",
+    sessionResume: "Open session",
+    priceDate: "Prices",
+    demo: "Demo Mode",
+    footer: "Detection is simulated. Your data stays on this device.",
+    breadcrumb: "Pantrified",
+    statPlan: "menu picks",
+    statItems: "ingredients",
+    sceneHint: "Drag to look around",
+  },
+
+  samples: {
+    "sample-a": {
+      label: "Student Fridge",
+      note: "Weekly shop leftovers, still has eggs and fresh greens.",
+      emoji: "🍳",
+    },
+    "sample-b": {
+      label: "End-of-Month Fridge",
+      note: "A minimal fridge, but plenty of trusty staples.",
+      emoji: "🍚",
+    },
+    "sample-c": {
+      label: "Post-Cook Fridge",
+      note: "Full of fresh vegetable scraps and assorted proteins.",
+      emoji: "🥗",
+    },
+  },
+};
+
+export const dictionaries: Record<Locale, Copy> = { id, en };
+
+/** Default dictionary, kept for modules that run outside React. */
+export const copy = id;

@@ -1,18 +1,12 @@
 "use client";
 
-import { copy } from "@/lib/copy";
+import { withBasePath } from "@/lib/basePath";
+import { useCopy } from "@/lib/ui";
 import { rp } from "@/lib/format";
 import type { IconName } from "./Icon";
 import { Icon } from "./Icon";
 
 export type Screen = "home" | "review" | "constraints" | "plans" | "detail" | "list" | "settings";
-
-const NAV: { id: Screen; label: string; icon: IconName }[] = [
-  { id: "home", label: copy.nav.home, icon: "home" },
-  { id: "plans", label: copy.nav.plans, icon: "plan" },
-  { id: "list", label: copy.nav.listLong, icon: "list" },
-  { id: "settings", label: copy.nav.settingsLong, icon: "user" },
-];
 
 export function DesktopSidebar({
   screen,
@@ -33,18 +27,25 @@ export function DesktopSidebar({
   budget: number;
   onResume: () => void;
 }) {
+  const copy = useCopy();
   const active = screen === "detail" ? "plans" : screen === "review" || screen === "constraints" ? "home" : screen;
+
+  const NAV: { id: Screen; label: string; icon: IconName }[] = [
+    { id: "home", label: copy.nav.home, icon: "home" },
+    { id: "plans", label: copy.nav.plans, icon: "plan" },
+    { id: "list", label: copy.nav.listLong, icon: "list" },
+    { id: "settings", label: copy.nav.settingsLong, icon: "user" },
+  ];
 
   return (
     <aside className="sidebar desk">
       <div className="sidebar-top">
         <button type="button" className="sidebar-brand" onClick={() => onNavigate("home")}>
           <span className="brand-mark" aria-hidden="true">
-            <Icon name="leaf" size={18} />
+            <img src={withBasePath("/icon.svg")} alt="" width={40} height={40} />
           </span>
           <span className="brand-text">
             <strong>{copy.brand.name}</strong>
-            <span>{copy.brand.tagline}</span>
           </span>
         </button>
 
@@ -88,7 +89,7 @@ export function DesktopSidebar({
           ) : (
             <>
               <strong>{copy.desktop.sessionEmpty}</strong>
-              <span className="session-meta">{copy.brand.tagline}</span>
+              <span className="session-meta">{copy.desktop.sessionEmptyHint}</span>
             </>
           )}
         </div>

@@ -2,8 +2,9 @@
 
 import dynamic from "next/dynamic";
 import { INGREDIENTS, RECIPES, SAMPLES } from "@/lib/data";
-import { copy } from "@/lib/copy";
+import { withBasePath } from "@/lib/basePath";
 import { rp } from "@/lib/format";
+import { useCopy } from "@/lib/ui";
 import { useMediaQuery } from "@/lib/useMedia";
 import { FoodArt } from "../FoodArt";
 import { Icon } from "../Icon";
@@ -23,13 +24,16 @@ export function Home({
   onResume: () => void;
   budget: number;
 }) {
+  const copy = useCopy();
   const wide = useMediaQuery("(min-width: 1024px)");
 
   return (
     <div className="screen-inner home">
       <header className="home-head mob">
-        <span className="wordmark">{copy.brand.name}</span>
-        <p className="tagline">{copy.brand.tagline}</p>
+        <span className="brand-home">
+          <img className="brand-icon" src={withBasePath("/icon.svg")} alt="" width={32} height={32} />
+          <span className="wordmark">{copy.brand.name}</span>
+        </span>
       </header>
 
       <section className="hero">
@@ -75,22 +79,27 @@ export function Home({
           <span className="muted small">{copy.home.samplesNote}</span>
         </div>
         <div className="hscroll" role="list">
-          {SAMPLES.map((sample, index) => (
-            <button
-              key={sample.id}
-              type="button"
-              role="listitem"
-              className="sample-card"
-              onClick={() => onSample(sample.id)}
-            >
-              <span className="sample-art">
-                <FoodArt art={index + 2} />
-                <span className="sample-scrim" aria-hidden="true" />
-                <span className="sample-title">{sample.label}</span>
-              </span>
-              <span className="sample-note">{sample.note}</span>
-            </button>
-          ))}
+          {SAMPLES.map((sample) => {
+            const meta = copy.samples[sample.id];
+            return (
+              <button
+                key={sample.id}
+                type="button"
+                role="listitem"
+                className="sample-card"
+                onClick={() => onSample(sample.id)}
+              >
+                <span className={`sample-art sample-${sample.id}`}>
+                  <span className="sample-emoji" aria-hidden="true">
+                    {meta.emoji}
+                  </span>
+                  <span className="sample-scrim" aria-hidden="true" />
+                  <span className="sample-title">{meta.label}</span>
+                </span>
+                <span className="sample-note">{meta.note}</span>
+              </button>
+            );
+          })}
         </div>
       </section>
 
@@ -103,7 +112,7 @@ export function Home({
             <li key={step.title}>
               <span className="step-num">{index + 1}</span>
               <span>
-                <strong>{step.title.replace(/^\d+\.\s*/, "")}</strong>
+                <strong>{step.title}</strong>
                 <span className="muted">{step.body}</span>
               </span>
             </li>

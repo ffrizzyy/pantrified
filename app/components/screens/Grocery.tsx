@@ -1,8 +1,8 @@
 "use client";
 
-import { copy } from "@/lib/copy";
 import { dateLabel, qty as fmtQty, rp } from "@/lib/format";
 import { groceryTotal } from "@/lib/plan";
+import { useUi } from "@/lib/ui";
 import { useCountUp } from "@/lib/useMedia";
 import type { Plan } from "@/lib/types";
 import { Icon } from "../Icon";
@@ -22,6 +22,7 @@ export function Grocery({
   onCsv: () => void;
   onShare: () => void;
 }) {
+  const { copy, locale } = useUi();
   const buy = plan.missing.filter((item) => item.missing > 0);
   const have = plan.missing.filter((item) => item.missing === 0);
   const total = groceryTotal(plan);
@@ -36,14 +37,13 @@ export function Grocery({
             {copy.grocery.back}
           </button>
           <h1 className="screen-title">{copy.grocery.title}</h1>
-          <p className="screen-sub">{copy.grocery.sub(plan.recipe.title, plan.recipe.servings)}</p>
 
           <section className="card total-card">
             <span className="muted small">{copy.grocery.total}</span>
             <strong className="total-money" aria-live="polite">
               {rp(shown)}
             </strong>
-            <span className="muted small">{copy.grocery.totalMeta(buy.length, dateLabel(priceDate))}</span>
+            <span className="muted small">{copy.grocery.totalMeta(buy.length, dateLabel(priceDate, locale))}</span>
           </section>
 
           <div className="card list-card">
@@ -59,8 +59,8 @@ export function Grocery({
                   <div className="grocery-main">
                     <span className="grocery-name">{item.name}</span>
                     <span className="muted small">
-                      {fmtQty(item.missing, item.unit)} · {copy.grocery.packs(item.packs)}
-                      {item.leftover > 0 ? ` · ${copy.grocery.leftover(fmtQty(item.leftover, item.unit))}` : ""}
+                      {fmtQty(item.missing, item.unit, copy.common.units)} · {copy.grocery.packs(item.packs)}
+                      {item.leftover > 0 ? ` · ${copy.grocery.leftover(fmtQty(item.leftover, item.unit, copy.common.units))}` : ""}
                     </span>
                   </div>
                   <span className="grocery-cost">{item.cost > 0 ? rp(item.cost) : copy.grocery.noPrice}</span>
@@ -80,7 +80,7 @@ export function Grocery({
                   <li key={item.ingredientId}>
                     <Icon name="check" size={14} />
                     {item.name}
-                    <span className="muted small">{fmtQty(item.qty, item.unit)}</span>
+                    <span className="muted small">{fmtQty(item.qty, item.unit, copy.common.units)}</span>
                   </li>
                 ))}
               </ul>
@@ -124,7 +124,7 @@ export function Grocery({
             </div>
             <div>
               <dt>{copy.grocery.railDate}</dt>
-              <dd>{dateLabel(priceDate)}</dd>
+              <dd>{dateLabel(priceDate, locale)}</dd>
             </div>
           </dl>
           <button type="button" className="btn btn-primary btn-block" onClick={onShare}>

@@ -2,7 +2,7 @@
 
 **A fridge photo in, three budget-fit Indonesian meal plans out — plus a shopping list for only what is actually missing.**
 
-Pantrified is a mobile-first PWA for students and young professionals who open the fridge, feel stuck, and end up ordering delivery. It reads the ingredients you already have, fits three meals to a daily budget in rupiah, and costs only the top-up shop.
+Pantrified is a mobile-first PWA for students and young professionals who open the fridge, feel stuck, and end up ordering delivery. It reads the ingredients you already have, fits three meals to a daily budget in rupiah, and costs only the top-up shop. It ships in Indonesian and English, with light and dark themes.
 
 **Live demo:** <https://ffrizzyy.github.io/pantrified/> — installable, offline-capable, no account.
 
@@ -18,7 +18,7 @@ Pantrified is a mobile-first PWA for students and young professionals who open t
 
 Deciding what to eat is a small decision made several times a day, and it is expensive in both time and money. Recipe apps assume an empty pantry and a Western supermarket. Delivery apps are fast but costly. Nothing starts from *what is already in the fridge*, *what the day's budget is*, and *what the smallest possible top-up shop looks like*.
 
-Pantrified does exactly that, in Indonesian, with Jakarta price data.
+Pantrified does exactly that, in Indonesian or English, with Jakarta price data.
 
 ## How it works
 
@@ -39,14 +39,20 @@ Pantrified does exactly that, in Indonesian, with Jakarta price data.
 | [<img src="docs/screenshots/desktop-plans.png" width="420" alt="Desktop plans" />](docs/screenshots/desktop-plans.png) | [<img src="docs/screenshots/desktop-grocery.png" width="420" alt="Desktop grocery list" />](docs/screenshots/desktop-grocery.png) |
 | Plans | Grocery |
 
+| Appearance & language | |
+| :---: | :---: |
+| [<img src="docs/screenshots/mobile-settings.png" width="200" alt="Appearance and language controls in Settings" />](docs/screenshots/mobile-settings.png) | [<img src="docs/screenshots/mobile-dark-en.png" width="200" alt="Dark mode with the English interface" />](docs/screenshots/mobile-dark-en.png) |
+| Theme and language controls | Dark mode, English UI |
+
 ## Highlights
 
 - **Budget as a hard constraint.** The planner scores recipes on pantry fit, cost, calories, diet, cook time, and equipment, then shows the three best options. Pack rounding and missing-only costing keep the total honest.
 - **Human in the loop.** The detector never silently decides. Low-confidence rows get an amber `?`, a "perlu dicek" tag, and a count in the header.
+- **Light and dark, Indonesian or English.** Both preferences live in Settings and persist on the device. The first visit follows the system colour scheme; the English interface translates UI copy only, while recipe and ingredient names stay Indonesian.
 - **Local-first and offline-ready.** No account, no backend, no upload. State lives in `localStorage`; the service worker keeps the shell usable offline.
-- **Designed for Indonesian kitchens.** Indonesian copy, rupiah formatting, local dishes and ingredients, and a fresh market visual language: cream paper, olive, sage, and orange, Fraunces headings, Plus Jakarta Sans UI.
+- **Designed for Indonesian kitchens.** Indonesian copy, rupiah formatting, local dishes and ingredients, and a fresh market visual language: cream paper, olive, sage, and orange in light mode, olive-black and lime in dark mode, Fraunces headings, Plus Jakarta Sans UI.
 - **Two real layouts.** A 390px-first mobile flow with a tab bar and sticky CTAs, and a desktop shell from 1024px with a sidebar, rails, a three.js pantry still-life, and a two- or three-column plan grid.
-- **Finishing touches that ship.** WhatsApp text export, CSV download, a 1080×1350 fabric.js share card, analytics consent gate, data export, and delete-everything.
+- **Finishing touches that ship.** The app icon doubles as the in-page logo, sample fridges use emoji cards, and exports cover WhatsApp text, CSV, a 1080×1350 fabric.js share card, analytics consent, data export, and delete-everything.
 
 ## Knowledge base
 
@@ -66,11 +72,11 @@ npm run validate:data
 | Layer | Choice |
 | --- | --- |
 | Framework | Next.js 16 App Router, static export (`output: "export"`) |
-| UI | React 19, TypeScript 7, hand-written CSS with design tokens (no Tailwind) |
+| UI | React 19, TypeScript 7, hand-written CSS with design tokens for light and dark themes (no Tailwind) |
 | Motion | CSS transitions on transform/opacity, `prefers-reduced-motion` guards |
 | 3D hero | three.js, desktop only, lazy-loaded, pauses offscreen |
 | Share card | fabric.js, drawn locally at 1080×1350 and exported as PNG |
-| Persistence | `localStorage` (`pantrified.v1`), service worker, web app manifest |
+| Persistence | `localStorage` (`pantrified.v1`, plus theme and locale keys), service worker, web app manifest |
 | Hosting | GitHub Pages via GitHub Actions, built with `/pantrified` base path |
 | QA | Data validator before every build, 36 Playwright flow/offline/PWA checks, responsive audit at 320–1200px |
 
@@ -127,7 +133,8 @@ Pantrified/
   app/                  Next.js PWA (see app/README.md for the full map)
     app/                layout, page, global styles and design tokens
     components/         shell, screens, share card, icons, illustrations, three.js scene
-    lib/                copy, types, recipe data, ingredient search, detector, planner, storage
+    lib/                copy (ID/EN dictionaries), ui provider, types, recipe data,
+                        ingredient search, detector, planner, storage
     public/             manifest, service worker, icons
     scripts/            Playwright QA and screenshot scripts
   .github/workflows/    GitHub Pages build and deploy
@@ -146,9 +153,10 @@ This is a working portfolio MVP, not a launched product.
 - **The recipe set is complete for M2:** 150 recipes and 150 dated price rows. Prices are a single sample table dated 2026-10-27, not a live feed.
 - **Only the 50 detector classes can come from a photo.** The other 100 pantry ingredients are searchable and usable in plans, but the simulated detector never returns them.
 - **No accounts, sync, or push notifications.** Data is per device and can be exported or deleted from Settings.
+- **English translates the interface, not the recipe content.** Ingredient and dish names remain Indonesian so prices and market data stay consistent.
 - **Mobile Safari and Chrome are the targets.** The 3D hero is decorative and desktop-only; the app is fully usable without it.
 
-The roadmap in [PRD.md](PRD.md) covers the real detector (FastAPI + ONNX), a larger Indonesian recipe set, live price sourcing, and an English toggle.
+The roadmap in [PRD.md](PRD.md) covers the real detector (FastAPI + ONNX), a larger Indonesian recipe set, and live price sourcing. Theme and language switching are implemented.
 
 ## Documentation
 
