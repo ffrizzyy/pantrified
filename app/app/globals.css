@@ -15,7 +15,9 @@
   --border-strong: #7c8564;
   --border-subtle: #dce3c8;
   --surface-tint: #f3f6e7;
+  --surface-raised: #ffffff;
   --tint-green: #dbe4c9;
+  --hover-tint: rgba(32, 36, 15, 0.045);
   --tint-amber: #ffedc9;
   --scrim: rgba(32, 36, 15, 0.78);
   --frame: #dbe4c9;
@@ -40,6 +42,7 @@
   --radius-control: 12px;
   --radius-pill: 999px;
   --shadow-card: 0 1px 2px rgba(32, 36, 15, 0.04), 0 12px 28px -22px rgba(32, 36, 15, 0.22);
+  --shadow-raised: 0 1px 2px rgba(28, 27, 24, 0.12), 0 0 0 1px rgba(28, 27, 24, 0.05);
   --shadow-lift: 0 18px 40px rgba(32, 36, 15, 0.16);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --tab-height: 64px;
@@ -82,7 +85,9 @@
   --border-strong: #6c7a4a;
   --border-subtle: #343a1c;
   --surface-tint: #242a13;
+  --surface-raised: #2e3517;
   --tint-green: #2b3316;
+  --hover-tint: rgba(255, 255, 255, 0.05);
   --tint-amber: #3a2c0e;
   --scrim: rgba(5, 8, 2, 0.82);
   --frame: #0d0f06;
@@ -95,6 +100,7 @@
   --scene-bg: radial-gradient(120% 110% at 68% 18%, #2a3018 0%, #1c220e 58%, #141808 100%);
   --shadow-frame: 0 0 0 1px var(--border-subtle), 0 30px 80px rgba(0, 0, 0, 0.62);
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 28px -22px rgba(0, 0, 0, 0.6);
+  --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.06);
   --shadow-lift: 0 18px 40px rgba(0, 0, 0, 0.55);
 }
 
@@ -556,11 +562,9 @@ a {
   gap: 10px;
 }
 
-.preference-cols,
-.preference-col {
+.preferences-grid {
   display: grid;
   gap: 16px;
-  align-content: start;
 }
 
 .field-note {
@@ -570,105 +574,56 @@ a {
   color: var(--muted);
 }
 
-.option-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.option {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 0 6px;
-  border: 1px solid transparent;
-  border-radius: var(--radius-control);
-  background: var(--surface-tint);
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  transition:
-    transform var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-fast) var(--ease-out);
-}
-
-.option:hover {
-  background: var(--tint-green);
-  color: var(--ink);
-}
-
-.option:active {
-  transform: scale(0.98);
-}
-
-.option.on {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--on-primary);
-  box-shadow: 0 1px 2px rgba(32, 36, 15, 0.14);
-}
-
-.option.on:hover {
-  border-color: var(--primary);
-  color: var(--on-primary);
-}
-
 .choice-list {
   display: grid;
-  gap: 6px;
+  gap: 3px;
+  padding: 3px;
+  background: var(--surface-tint);
+  border-radius: var(--radius-control);
 }
 
 .choice {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 10px;
   width: 100%;
-  padding: 10px 12px;
+  padding: 8px 10px;
   text-align: left;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-control);
-  background: var(--surface);
+  border: none;
+  border-radius: 9px;
+  background: transparent;
   transition:
-    transform var(--dur-fast) var(--ease-out),
     background-color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+    box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .choice:hover {
-  border-color: var(--border-strong);
-  background: var(--surface-tint);
-}
-
-.choice:active {
-  transform: scale(0.995);
+  background: var(--hover-tint);
 }
 
 .choice.on {
-  border-color: var(--primary);
-  background: var(--surface-tint);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-raised);
+}
+
+.choice.on:hover {
+  background: var(--surface-raised);
 }
 
 .choice-mark {
   display: grid;
   place-items: center;
   flex: none;
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   border: 1.5px solid var(--border-strong);
   border-radius: 50%;
   transition: border-color var(--dur-fast) var(--ease-out);
 }
 
 .choice-mark span {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--primary);
   transform: scale(0);
@@ -702,8 +657,41 @@ a {
   color: var(--muted);
 }
 
-.choice.on .choice-copy strong {
-  color: var(--primary-deep);
+/* Desktop: preferences become a three-column form so the radio list sits in
+   the same rhythm as the option rows above it. */
+@media (min-width: 1024px) {
+  .preferences-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      "meals kcal cook"
+      "diet diet diet"
+      "note note note";
+    row-gap: 18px;
+  }
+
+  .pref-meals {
+    grid-area: meals;
+  }
+
+  .pref-kcal {
+    grid-area: kcal;
+  }
+
+  .pref-cook {
+    grid-area: cook;
+  }
+
+  .pref-diet {
+    grid-area: diet;
+  }
+
+  .pref-note {
+    grid-area: note;
+  }
+
+  .choice-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .panel-rows {
@@ -953,7 +941,7 @@ a {
 }
 
 .segmented button {
-  height: 38px;
+  height: 40px;
   padding: 0 8px;
   border-radius: 9px;
   font-size: 12.5px;
@@ -972,9 +960,9 @@ a {
 }
 
 .segmented button.on {
-  background: var(--surface);
+  background: var(--surface-raised);
   color: var(--ink);
-  box-shadow: 0 1px 2px rgba(28, 27, 24, 0.1), 0 0 0 1px rgba(28, 27, 24, 0.04);
+  box-shadow: var(--shadow-raised);
 }
 
 .field-label {
@@ -2617,6 +2605,8 @@ a {
 
   .cta-inner {
     max-width: none;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .cta-inner .btn-block {
@@ -2851,16 +2841,10 @@ a {
 
   .kitchen-panel {
     grid-area: kitchen;
-    align-self: stretch;
   }
 
   .preferences-panel {
     grid-area: preferences;
-  }
-
-  .preference-cols {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
   }
 
   .settings-grid {
@@ -3138,14 +3122,12 @@ a {
     padding: 16px;
   }
 
-  .option {
-    font-size: 12.5px;
+  .segmented button {
     padding: 0 4px;
   }
 
   .choice {
     gap: 9px;
-    padding: 9px 10px;
   }
 }
 

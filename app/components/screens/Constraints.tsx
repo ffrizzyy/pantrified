@@ -41,31 +41,31 @@ export function Constraints({
 
           <div className="form-grid">
             <section className="panel budget-panel">
-              <div className="field-block">
-                <label className="field-label" htmlFor="budget">
+              <div className="panel-head">
+                <label className="panel-title" htmlFor="budget">
                   {copy.constraints.budgetLabel}
                 </label>
-                <div className="money-input">
-                  <span>{copy.common.rupiahPrefix}</span>
-                  <input
-                    id="budget"
-                    type="text"
-                    inputMode="numeric"
-                    autoComplete="off"
-                    value={profile.budget.toLocaleString("id-ID")}
-                    onChange={(e) => onChange({ budget: Number(e.target.value.replace(/\D/g, "")) || 0 })}
-                    onBlur={() => {
-                      if (profile.budget < 5000) onChange({ budget: 5000 });
-                    }}
-                  />
-                </div>
               </div>
-              <div className="option-grid">
+              <div className="money-input">
+                <span>{copy.common.rupiahPrefix}</span>
+                <input
+                  id="budget"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  value={profile.budget.toLocaleString("id-ID")}
+                  onChange={(e) => onChange({ budget: Number(e.target.value.replace(/\D/g, "")) || 0 })}
+                  onBlur={() => {
+                    if (profile.budget < 5000) onChange({ budget: 5000 });
+                  }}
+                />
+              </div>
+              <div className="segmented" role="group" aria-label={copy.constraints.budgetLabel}>
                 {[15000, 25000, 40000].map((value) => (
                   <button
                     key={value}
                     type="button"
-                    className={`option ${profile.budget === value ? "on" : ""}`}
+                    className={profile.budget === value ? "on" : ""}
                     aria-pressed={profile.budget === value}
                     onClick={() => onChange({ budget: value })}
                   >
@@ -81,89 +81,85 @@ export function Constraints({
                 <h2 className="panel-title">{copy.constraints.preferencesTitle}</h2>
               </div>
 
-              <div className="preference-cols">
-                <div className="preference-col">
-                  <div className="field-block">
-                    <span className="field-label">{copy.constraints.mealsLabel}</span>
-                    <div className="segmented" role="group" aria-label={copy.a11y.meals}>
-                      {[1, 2, 3].map((n) => (
-                        <button
-                          key={n}
-                          type="button"
-                          className={profile.meals === n ? "on" : ""}
-                          aria-pressed={profile.meals === n}
-                          onClick={() => onChange({ meals: n })}
-                        >
-                          {copy.constraints.meals(n)}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="field-block">
-                    <span className="field-label" id="diet-label">
-                      {copy.constraints.dietLabel}
-                    </span>
-                    <div className="choice-list" role="radiogroup" aria-labelledby="diet-label">
-                      {diets.map(([value, label, description]) => (
-                        <button
-                          key={value}
-                          type="button"
-                          role="radio"
-                          aria-checked={profile.diet === value}
-                          className={`choice ${profile.diet === value ? "on" : ""}`}
-                          onClick={() => onChange({ diet: value })}
-                        >
-                          <span className="choice-mark" aria-hidden="true">
-                            <span />
-                          </span>
-                          <span className="choice-copy">
-                            <strong>{label}</strong>
-                            <span>{description}</span>
-                          </span>
-                        </button>
-                      ))}
-                    </div>
+              <div className="preferences-grid">
+                <div className="field-block pref-meals">
+                  <span className="field-label">{copy.constraints.mealsLabel}</span>
+                  <div className="segmented" role="group" aria-label={copy.a11y.meals}>
+                    {[1, 2, 3].map((n) => (
+                      <button
+                        key={n}
+                        type="button"
+                        className={profile.meals === n ? "on" : ""}
+                        aria-pressed={profile.meals === n}
+                        onClick={() => onChange({ meals: n })}
+                      >
+                        {copy.constraints.meals(n)}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="preference-col">
-                  <div className="field-block">
-                    <span className="field-label">{copy.constraints.kcalLabel}</span>
-                    <div className="option-grid">
-                      {[450, 600, 750].map((value) => (
-                        <button
-                          key={value}
-                          type="button"
-                          className={`option ${profile.kcalTarget === value ? "on" : ""}`}
-                          aria-pressed={profile.kcalTarget === value}
-                          onClick={() => onChange({ kcalTarget: value })}
-                        >
-                          {copy.constraints.kcalOption(value)}
-                        </button>
-                      ))}
-                    </div>
+                <div className="field-block pref-diet">
+                  <span className="field-label" id="diet-label">
+                    {copy.constraints.dietLabel}
+                  </span>
+                  <div className="choice-list" role="radiogroup" aria-labelledby="diet-label">
+                    {diets.map(([value, label, description]) => (
+                      <button
+                        key={value}
+                        type="button"
+                        role="radio"
+                        aria-checked={profile.diet === value}
+                        className={`choice ${profile.diet === value ? "on" : ""}`}
+                        onClick={() => onChange({ diet: value })}
+                      >
+                        <span className="choice-mark" aria-hidden="true">
+                          <span />
+                        </span>
+                        <span className="choice-copy">
+                          <strong>{label}</strong>
+                          <span>{description}</span>
+                        </span>
+                      </button>
+                    ))}
                   </div>
-
-                  <div className="field-block">
-                    <span className="field-label">{copy.constraints.cookLabel}</span>
-                    <div className="option-grid">
-                      {[15, 30, 45].map((value) => (
-                        <button
-                          key={value}
-                          type="button"
-                          className={`option ${profile.maxCook === value ? "on" : ""}`}
-                          aria-pressed={profile.maxCook === value}
-                          onClick={() => onChange({ maxCook: value })}
-                        >
-                          {copy.constraints.cookOption(value)}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <p className="field-note">{copy.constraints.preferencesNote}</p>
                 </div>
+
+                <div className="field-block pref-kcal">
+                  <span className="field-label">{copy.constraints.kcalLabel}</span>
+                  <div className="segmented" role="group" aria-label={copy.constraints.kcalLabel}>
+                    {[450, 600, 750].map((value) => (
+                      <button
+                        key={value}
+                        type="button"
+                        className={profile.kcalTarget === value ? "on" : ""}
+                        aria-pressed={profile.kcalTarget === value}
+                        onClick={() => onChange({ kcalTarget: value })}
+                      >
+                        {copy.constraints.kcalOption(value)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="field-block pref-cook">
+                  <span className="field-label">{copy.constraints.cookLabel}</span>
+                  <div className="segmented" role="group" aria-label={copy.constraints.cookLabel}>
+                    {[15, 30, 45].map((value) => (
+                      <button
+                        key={value}
+                        type="button"
+                        className={profile.maxCook === value ? "on" : ""}
+                        aria-pressed={profile.maxCook === value}
+                        onClick={() => onChange({ maxCook: value })}
+                      >
+                        {copy.constraints.cookOption(value)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="field-note pref-note">{copy.constraints.preferencesNote}</p>
               </div>
             </section>
 
