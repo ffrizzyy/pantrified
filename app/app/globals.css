@@ -35,11 +35,11 @@
   --switch-knob: #ffffff;
   --scene-bg: radial-gradient(120% 110% at 68% 18%, #f6f8ea 0%, #e6ecd3 58%, #d3dcc0 100%);
   --shadow-frame: 0 0 0 1px var(--border-subtle), 0 30px 80px rgba(28, 27, 24, 0.14);
-  --radius-card: 22px;
-  --radius-inner: 16px;
-  --radius-control: 14px;
+  --radius-card: 20px;
+  --radius-inner: 14px;
+  --radius-control: 12px;
   --radius-pill: 999px;
-  --shadow-card: 0 2px 8px rgba(32, 36, 15, 0.06);
+  --shadow-card: 0 1px 2px rgba(32, 36, 15, 0.04), 0 12px 28px -22px rgba(32, 36, 15, 0.22);
   --shadow-lift: 0 18px 40px rgba(32, 36, 15, 0.16);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --tab-height: 64px;
@@ -94,7 +94,7 @@
   --switch-knob: #f4f5e8;
   --scene-bg: radial-gradient(120% 110% at 68% 18%, #2a3018 0%, #1c220e 58%, #141808 100%);
   --shadow-frame: 0 0 0 1px var(--border-subtle), 0 30px 80px rgba(0, 0, 0, 0.62);
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.38);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 28px -22px rgba(0, 0, 0, 0.6);
   --shadow-lift: 0 18px 40px rgba(0, 0, 0, 0.55);
 }
 
@@ -526,6 +526,211 @@ a {
   gap: 14px;
 }
 
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 18px;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.panel-head {
+  padding-bottom: 2px;
+}
+
+.panel-title {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.field-block {
+  display: grid;
+  gap: 10px;
+}
+
+.preference-cols,
+.preference-col {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.field-note {
+  margin-top: -2px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  background: var(--surface-tint);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.option:hover {
+  background: var(--tint-green);
+  color: var(--ink);
+}
+
+.option:active {
+  transform: scale(0.98);
+}
+
+.option.on {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 1px 2px rgba(32, 36, 15, 0.14);
+}
+
+.option.on:hover {
+  border-color: var(--primary);
+  color: var(--on-primary);
+}
+
+.choice-list {
+  display: grid;
+  gap: 6px;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.choice:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-tint);
+}
+
+.choice:active {
+  transform: scale(0.995);
+}
+
+.choice.on {
+  border-color: var(--primary);
+  background: var(--surface-tint);
+}
+
+.choice-mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 50%;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.choice-mark span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  transform: scale(0);
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+
+.choice.on .choice-mark {
+  border-color: var(--primary);
+}
+
+.choice.on .choice-mark span {
+  transform: scale(1);
+}
+
+.choice-copy {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.choice-copy strong {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.choice-copy span {
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.choice.on .choice-copy strong {
+  color: var(--primary-deep);
+}
+
+.panel-rows {
+  display: grid;
+  margin-top: -4px;
+}
+
+.panel-rows > * {
+  padding: 14px 0;
+}
+
+.panel-rows > *:first-child {
+  padding-top: 0;
+}
+
+.panel-rows > *:last-child {
+  padding-bottom: 0;
+}
+
+.panel-rows > * + * {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.panel > .fine {
+  margin-top: -2px;
+}
+
 .list-card {
   overflow: hidden;
   margin-bottom: 10px;
@@ -741,28 +946,35 @@ a {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
-  gap: 4px;
-  padding: 4px;
+  gap: 3px;
+  padding: 3px;
   background: var(--surface-tint);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
 }
 
 .segmented button {
-  height: 40px;
+  height: 38px;
   padding: 0 8px;
-  border-radius: var(--radius-pill);
+  border-radius: 9px;
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--muted);
   white-space: nowrap;
-  transition: background-color 140ms ease-out, color 140ms ease-out;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.segmented button:hover {
+  color: var(--ink);
 }
 
 .segmented button.on {
   background: var(--surface);
   color: var(--ink);
-  box-shadow: 0 1px 3px rgba(28, 27, 24, 0.12);
+  box-shadow: 0 1px 2px rgba(28, 27, 24, 0.1), 0 0 0 1px rgba(28, 27, 24, 0.04);
 }
 
 .field-label {
@@ -801,9 +1013,17 @@ a {
   gap: 8px;
   height: 56px;
   padding: 0 14px;
-  border: 1px solid var(--border-strong);
-  border-radius: 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-control);
   background: var(--surface);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.money-input:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--surface-tint);
 }
 
 .money-input span {
@@ -907,6 +1127,11 @@ a {
 .setting-stack {
   display: grid;
   gap: 10px;
+}
+
+.setting-stack + .setting-stack {
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .setting-stack strong {
@@ -1867,7 +2092,7 @@ a {
 .rail {
   position: sticky;
   top: 88px;
-  padding: 22px;
+  padding: 20px;
   border-radius: var(--radius-card);
   border: 1px solid var(--border-subtle);
   background: var(--surface);
@@ -1881,7 +2106,7 @@ a {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .rail-stats {
@@ -1926,7 +2151,11 @@ a {
   justify-content: space-between;
   gap: 12px;
   padding: 9px 0;
-  border-bottom: 1px dashed var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.rail-list > div:last-child {
+  border-bottom: 0;
 }
 
 .rail-list dt {
@@ -1942,7 +2171,9 @@ a {
 }
 
 .rail-note {
-  margin-top: 14px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
   font-size: 12px;
   line-height: 1.5;
   color: var(--muted);
@@ -2388,6 +2619,10 @@ a {
     max-width: none;
   }
 
+  .cta-inner .btn-block {
+    max-width: 360px;
+  }
+
   /* home */
   .hero {
     display: grid;
@@ -2603,11 +2838,29 @@ a {
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "budget kitchen"
+      "preferences preferences";
     gap: 16px;
+    align-items: start;
   }
 
-  .form-grid .span-2 {
-    grid-column: span 2;
+  .budget-panel {
+    grid-area: budget;
+  }
+
+  .kitchen-panel {
+    grid-area: kitchen;
+    align-self: stretch;
+  }
+
+  .preferences-panel {
+    grid-area: preferences;
+  }
+
+  .preference-cols {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
   }
 
   .settings-grid {
@@ -2787,8 +3040,8 @@ a {
   }
 }
 
-/* 1024–1359px: the desktop shell is on, but the content column is too narrow
-   for three plan columns, divided form cards, or the 21:8 detail hero. */
+/* 1024-1359px: the desktop shell is on, but the rail leaves the content
+   column too narrow. Drop the rail so the form can keep two real columns. */
 @media (min-width: 1024px) and (max-width: 1359px) {
   .plan-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2807,15 +3060,6 @@ a {
     min-height: 320px;
   }
 
-  .form-grid,
-  .settings-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-grid .span-2 {
-    grid-column: auto;
-  }
-
   .detail-hero {
     aspect-ratio: 16 / 9;
   }
@@ -2827,10 +3071,7 @@ a {
   .detail-title h1 {
     font-size: 34px;
   }
-}
 
-/* 1024–1199px: drop the rail and let the single content column breathe. */
-@media (min-width: 1024px) and (max-width: 1199px) {
   .main {
     padding: 0 28px 64px;
   }
@@ -2880,7 +3121,7 @@ a {
   .settings-grid,
   .settings-group {
     display: grid;
-    gap: 12px;
+    gap: 14px;
   }
 
   .settings-grid {
@@ -2889,6 +3130,22 @@ a {
 
   .group-title {
     display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .panel {
+    padding: 16px;
+  }
+
+  .option {
+    font-size: 12.5px;
+    padding: 0 4px;
+  }
+
+  .choice {
+    gap: 9px;
+    padding: 9px 10px;
   }
 }
 

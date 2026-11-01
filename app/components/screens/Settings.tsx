@@ -32,60 +32,58 @@ export function Settings({
       <div className="settings-grid">
         <section className="settings-group">
           <h2 className="group-title desk">{copy.settings.sectionData}</h2>
-          <section className="card pad">
-            <div className="switch-row">
-              <span>
-                <strong>{copy.settings.analyticsTitle}</strong>
-                <span className="muted">{copy.settings.analyticsBody}</span>
-              </span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={profile.consent}
-                aria-label={copy.a11y.analytics}
-                className={`switch ${profile.consent ? "on" : ""}`}
-                onClick={() => onChange({ consent: !profile.consent })}
-              >
-                <span />
+          <section className="panel">
+            <div className="panel-rows">
+              <div className="switch-row">
+                <span>
+                  <strong>{copy.settings.analyticsTitle}</strong>
+                  <span className="muted">{copy.settings.analyticsBody}</span>
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={profile.consent}
+                  aria-label={copy.a11y.analytics}
+                  className={`switch ${profile.consent ? "on" : ""}`}
+                  onClick={() => onChange({ consent: !profile.consent })}
+                >
+                  <span />
+                </button>
+              </div>
+
+              <div className="switch-row">
+                <span>
+                  <strong>{copy.settings.staplesTitle}</strong>
+                  <span className="muted">{copy.settings.staplesBody}</span>
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={profile.staples}
+                  aria-label={copy.a11y.staples}
+                  className={`switch ${profile.staples ? "on" : ""}`}
+                  onClick={() => onChange({ staples: !profile.staples })}
+                >
+                  <span />
+                </button>
+              </div>
+
+              <button type="button" className="row-button" onClick={onOpenEquipment}>
+                <span>
+                  <strong>{copy.settings.equipmentTitle}</strong>
+                  <span className="muted">{toolLabel(profile.equipment, copy.common.equipment)}</span>
+                </span>
+                <Icon name="chevron" size={18} />
               </button>
             </div>
             <p className="fine">{copy.settings.events(events)}</p>
-          </section>
-
-          <section className="card pad">
-            <div className="switch-row">
-              <span>
-                <strong>{copy.settings.staplesTitle}</strong>
-                <span className="muted">{copy.settings.staplesBody}</span>
-              </span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={profile.staples}
-                aria-label={copy.a11y.staples}
-                className={`switch ${profile.staples ? "on" : ""}`}
-                onClick={() => onChange({ staples: !profile.staples })}
-              >
-                <span />
-              </button>
-            </div>
-          </section>
-
-          <section className="card pad">
-            <button type="button" className="row-button" onClick={onOpenEquipment}>
-              <span>
-                <strong>{copy.settings.equipmentTitle}</strong>
-                <span className="muted">{toolLabel(profile.equipment, copy.common.equipment)}</span>
-              </span>
-              <Icon name="chevron" size={18} />
-            </button>
           </section>
         </section>
 
         <section className="settings-group">
           <h2 className="group-title desk">{copy.settings.sectionApp}</h2>
 
-          <section className="card pad">
+          <section className="panel">
             <div className="setting-stack">
               <span>
                 <strong>{copy.settings.appearanceTitle}</strong>
@@ -110,9 +108,7 @@ export function Settings({
                 </button>
               </div>
             </div>
-          </section>
 
-          <section className="card pad">
             <div className="setting-stack">
               <span>
                 <strong>{copy.settings.languageTitle}</strong>
@@ -139,7 +135,7 @@ export function Settings({
             </div>
           </section>
 
-          <section className="card pad">
+          <section className="panel">
             <button type="button" className="row-button" onClick={onExport}>
               <span>
                 <strong>{copy.settings.exportTitle}</strong>
@@ -156,7 +152,7 @@ export function Settings({
             </button>
           </section>
 
-          <section className="card pad about">
+          <section className="panel about">
             <span className="group-title desk">{copy.settings.sectionAbout}</span>
             <strong>{copy.brand.version}</strong>
             <p className="muted small">{copy.settings.aboutBody(dateLabel(priceDate, locale))}</p>
